@@ -2,14 +2,13 @@
 
 module.exports = class password {
 
-	cunstructor(){
-	}
+	cunstructor(){}
 
-	change(req, res) {
+	changePassword(req, res) {
 		res.json({status: "change password"});	
 	}
 
-	forgot(req, res) {
+	forgotPassword(req, res) {
 		res.json({status: "forgot password"});	
 	}
 }

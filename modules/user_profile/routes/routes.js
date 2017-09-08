@@ -7,10 +7,10 @@ const express		= require('express'),
 const classA = new loginRegister();
 const classB = new password();
 
-router.get('/register', classA.register);
-router.get('/login', classA.login);
-
-router.put('/change-password', classB.change);
-router.put('/forgot-password', classB.forgot);
+	router
+		.get('/register', classA.register)
+		.get('/login', classA.login)
+		.put('/change-password', classB.changePassword)
+		.put('/forgot-password', classB.forgotPassword);
 
 module.exports = router;

@@ -4,16 +4,11 @@
 	constructor () {}
 
 	register(req, res){
-		try{
-			var a = b;
-			res.json({status: "register"});					
-		}catch(e){
-			console.log(e)
-		}
-		
+		res.json({status: "register"});		
 	}
 
 	login(req, res){		
 		res.json({status: "login"});
 	}
+
 }
