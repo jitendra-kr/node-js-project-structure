@@ -1,5 +1,5 @@
 
- module.exports = class loginRegister {
+class loginRegister {
 
 	constructor () {}
 
@@ -11,4 +11,8 @@
 		res.json({status: "login"});
 	}
 
+}
+
+module.exports = {
+	class: new loginRegister()
 }
