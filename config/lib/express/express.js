@@ -22,5 +22,6 @@ module.exports = function (app) {
 
 	app.use(express.static(path.join(__dirname, 'views')))
 
+	// HTTP request logger
 	app.use(morgan('dev'));
 }

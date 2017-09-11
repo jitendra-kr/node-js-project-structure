@@ -6,7 +6,7 @@ const express		= require('express'),
 	dotenv			= require('dotenv'),
 	chalk			= require('chalk'),
 	ENV				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
-					  require(path.resolve('./config/lib/required'))(server);
+					  require(path.resolve('./config/lib/server'))(server);
 
 
 server.listen(ENV.PORT, function () {

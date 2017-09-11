@@ -1,6 +1,6 @@
 
 
-class password {
+class Password {
 
 	cunstructor(){}
 
@@ -14,5 +14,5 @@ class password {
 }
 
 module.exports = {
-	class: new password()
+	password: new Password()
 }

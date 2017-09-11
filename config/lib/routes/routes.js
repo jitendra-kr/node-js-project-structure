@@ -1,12 +1,25 @@
 const path			= require('path'),
-	userProfile 	= require(path.resolve('./modules/user_profile/routes/routes'));
+	fs 				= require('fs'),
+	location		= path.resolve('./modules');
+
+
+let dirObj 			= {};
+
+fs.readdirSync(location)
+  .filter((d) => {
+	return fs.statSync(`${location}/${d}`).isDirectory()
+}).forEach((dir)=>{
+	dirObj[dir] = require(path.resolve(`./modules/${dir}/routes/routes`))
+	
+});
+
 
 module.exports = (app) => {
-	
-	app.get('/', (req, res) => {res.render('index')});
-	
-	app.use('/api/user-profile', userProfile);
 
+ app
+	.get('/', (req, res) => {res.render('index')})
+	.use('/api/user-profile', dirObj.user_profile)
+	.use('/api/blog', dirObj.blog_management)
 
 }
 

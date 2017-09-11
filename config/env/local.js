@@ -1,6 +1,7 @@
 
 module.exports = {
+	COMMON: require('./common'),
 	PORT:5000,
-	DB:'nodeJsWithClass',
+	MONGODB:'nodeJsStructure',
 	MODE_TYPE: 'localhost'
 }

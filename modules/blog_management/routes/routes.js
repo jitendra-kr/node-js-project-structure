@@ -9,11 +9,11 @@ let ReadDirectory 	= new helperLib.read_directory.readDirectory()
 let fileObj 		= ReadDirectory.requireFiles(dir)
 
 
+
 router
-	.get('/register', fileObj.login_register.loginRegister.register)
-	.get('/login', fileObj.login_register.loginRegister.login)
-	.put('/change-password', fileObj.password.password.changePassword)
-	.put('/forgot-password', fileObj.password.password.forgotPassword);
+	.post('/create-blog', fileObj.crud_blog.blog.create)
+	.get('/read-blog', fileObj.crud_blog.blog.read)
+	.put('/update-blog', fileObj.crud_blog.blog.update)
+	.delete('/delete-blog', fileObj.crud_blog.blog.delete)
 
-module.exports = router;
-
+module.exports = router

@@ -1,5 +1,5 @@
 
-class loginRegister {
+class LoginRegister {
 
 	constructor () {}
 
@@ -14,5 +14,5 @@ class loginRegister {
 }
 
 module.exports = {
-	class: new loginRegister()
+	loginRegister: new LoginRegister()
 }
