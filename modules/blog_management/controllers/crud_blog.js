@@ -1,4 +1,4 @@
-
+const path = require('path');
 
 class Blog {
 

@@ -32,9 +32,11 @@ class ReadDirectory {
 			 let fileObj = {}
 
 			 files.forEach(file => {
+			 	
 			 	fileObj[file] = require(`${dir}/${file}`);
+
 			 })
-			 
+			
 			 return fileObj	
 
 		 }else{
@@ -48,11 +50,16 @@ class ReadDirectory {
 			throw new Error('directory not received to read and require files')
 
 		}
-	}	
+	}
+
+	fileName(dir) {
+
+	}
 
 }
 
 
 module.exports = {
-	readDirectory: ReadDirectory
+	readDirectory: ReadDirectory,
+	file: path.parse(path.basename(__filename)).name
 }

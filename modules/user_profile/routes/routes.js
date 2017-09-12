@@ -6,14 +6,18 @@ const path			= require('path'),
 
 
 let ReadDirectory 	= new helperLib.read_directory.readDirectory()
-let fileObj 		= ReadDirectory.requireFiles(dir)
 
+const fileObj 		= ReadDirectory.requireFiles(dir)
 
 router
-	.get('/register', fileObj.login_register.loginRegister.register)
-	.get('/login', fileObj.login_register.loginRegister.login)
-	.put('/change-password', fileObj.password.password.changePassword)
-	.put('/forgot-password', fileObj.password.password.forgotPassword);
+	.get('/register', 						fileObj.login_register.loginRegister.register)
+	.get('/login', 							fileObj.login_register.loginRegister.login)
+	.put('/change-password', 				fileObj.password.password.changePassword)
+	.put('/forgot-password', 				fileObj.password.password.forgotPassword)
 
-module.exports = router;
+
+module.exports = {
+	router: router,
+	base: '/api/user-profile'	
+};
 
