@@ -1,6 +1,6 @@
 const path			= require('path'),
-	fs 				= require('fs'),
-	location		= path.resolve('./modules');
+	  fs 			= require('fs'),
+	  location		= path.resolve('./modules');
 
 
 module.exports = (app) => {
