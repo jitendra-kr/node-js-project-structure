@@ -7,11 +7,6 @@ module.exports = (app) => {
 
     let dirObj = {}
 
-    app.use((req, res, next) => {
-    	console.log("completedTripcompletedTripcompletedTrip")
-    	next()
-    });
-
     fs.readdirSync(location)
         .filter((dir) => {
 
@@ -33,27 +28,27 @@ module.exports = (app) => {
 
         });
 
-    app.use((err, req, res, next) => {
-    	
-    	let date 		= new Date(),
-    		year 		= `/${date.getFullYear()+1}/`,
-    		month 		=  date.toLocaleString("en-us", { month: "short" }),
-    		d 			=  `${date.getDate()}.log`
-    	    dirArray 	= ['logs', year, month],
-    	    tempDir		= '';
+   //  app.use((err, req, res, next) => {
 
-    	dirArray.forEach((n, i) => {
-    		tempDir+=dirArray[i]   
-    		if (!fs.existsSync(tempDir)) {
-    			fs.mkdirSync(tempDir)
-    		} 	
-    	});
+   //  	let date 		= new Date(),
+   //  		year 		= `/${date.getFullYear()+1}/`,
+   //  		month 		=  date.toLocaleString("en-us", { month: "short" }),
+   //  		d 			=  `${date.getDate()}.log`
+   //  	    dirArray 	= ['logs', year, month],
+   //  	    tempDir		= '';
 
-    	if (!fs.existsSync(`${tempDir}/${d}`)) {
-			fs.writeFileSync(`${tempDir}/${d}`, date)		  		
-    	}
+   //  	dirArray.forEach((n, i) => {
+   //  		tempDir+=dirArray[i]   
+   //  		if (!fs.existsSync(tempDir)) {
+   //  			fs.mkdirSync(tempDir)
+   //  		} 	
+   //  	});
 
-    });     
+   //  	if (!fs.existsSync(`${tempDir}/${d}`)) {
+			// fs.writeFileSync(`${tempDir}/${d}`, date)		  		
+   //  	}
+
+   //  });     
 
 }
 

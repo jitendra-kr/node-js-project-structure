@@ -7,17 +7,17 @@ const path				= require('path'),
 class Jwt {
 
 	constructor() {
-		this.key = new Buffer(ENV.COMMON.JWT_KEY).toString('base64')
+		this.key = new Buffer(ENV.JWT_KEY).toString('base64')
 	}
 
 	sign(data) {
 
 		let crypt = new Crypt()
-		let encrypt = crypt.encrypt(data);
+		let payload = crypt.encrypt(data)
 
-		let token = jwtToken.sign(encrypt, new Buffer(this.key).toString('base64'));
+		let token = jwtToken.sign(payload, new Buffer(this.key).toString('base64'))
 
-		return token;			
+		return token		
 	}
 
 	verify (token) {
@@ -28,8 +28,12 @@ class Jwt {
 		let crypt = new Crypt()
 		let decrypt = crypt.decrypt(payload)
 
-			payload = JSON.parse(decrypt) 
+			try{
+				payload = JSON.parse(decrypt) 
+			}catch(e){
+				payload = decrypt
+			}			
 
-		return payload;
+		return payload
 	}	
 }

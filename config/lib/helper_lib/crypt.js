@@ -5,8 +5,8 @@ const crypto 			= require('crypto'),
 class Crypt {
 
 	constructor() {
-		this.key  = ENV.COMMON.ENCRYPTION_KEY
-		this.algo = ENV.COMMON.ENCRYPTION_ALGO
+		this.key  = ENV.ENCRYPTION_KEY
+		this.algo = ENV.ENCRYPTION_ALGO
 	}
 
 
@@ -40,12 +40,3 @@ class Crypt {
 module.exports = {
 	crypt: Crypt
 }
-
-// let c = new Crypt();
-
-// let encrypt = c.encrypt('{"a": 1, "b":2}');
-// let encrypt = c.decrypt('bedcbd85034dc37eb2ac174994afd9b0:b03861afe09c32548da9bceca9bbd9bc');
-
-// console.log(encrypt);
-
-

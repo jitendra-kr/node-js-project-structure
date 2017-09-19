@@ -10,7 +10,8 @@ let ReadDirectory 	= new helperLib.read_directory.readDirectory()
 const fileObj 		= ReadDirectory.requireFiles(dir)
 
 router
-	.get('/register', 						fileObj.login_register.loginRegister.register)
+	.post('/register', 						fileObj.login_register.loginRegister.register)
+	.put('/update', 						fileObj.login_register.loginRegister.update)
 	.get('/login', 							fileObj.login_register.loginRegister.login)
 	.put('/change-password', 				fileObj.password.password.changePassword)
 	.put('/forgot-password', 				fileObj.password.password.forgotPassword)
