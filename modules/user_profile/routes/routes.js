@@ -12,7 +12,7 @@ const fileObj 		= ReadDirectory.requireFiles(dir)
 router
 	.post('/register', 						fileObj.login_register.loginRegister.register)
 	.put('/update', 						fileObj.login_register.loginRegister.update)
-	.get('/login', 							fileObj.login_register.loginRegister.login)
+	.post('/login', 						fileObj.login_register.loginRegister.login)
 	.put('/change-password', 				fileObj.password.password.changePassword)
 	.put('/forgot-password', 				fileObj.password.password.forgotPassword)
 

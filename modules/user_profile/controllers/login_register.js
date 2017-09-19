@@ -1,4 +1,5 @@
 const path 					= require('path'),
+	helperLib				= require(path.resolve('./config/lib/helper_lib')),
 	UserProfileModel 		= require('../models/user_profile_model');
 
 
@@ -7,6 +8,7 @@ class UserAccount {
 	constructor () {}
 
 	register(req, res) {
+
 
 	    let userProfileModel = new UserProfileModel(req.body)
 
@@ -35,8 +37,44 @@ class UserAccount {
 
 	}
 
-	login(req, res){		
-		res.json({status: "login"});
+	login(req, res){	
+
+		let conditions 	= {'email': req.body.email},
+			projection  = {__v:0, created_at:0, updated_at:0, _id:0};
+
+		UserProfileModel.findOne(conditions, projection, (err, user) => {
+
+			let Crypt   = new helperLib.crypt.crypt()
+			let	isValid = Crypt.compareHash(req.body.password, user ? user.password : '');
+			let resObj  = {};
+
+			if (user && isValid) {
+
+				user.password 		= undefined
+
+                resObj.status 		= 'success'
+                resObj.statusCode  	= 200
+                resObj.message 		= 'logged in successfully'
+                resObj.result 		= user
+
+			}else if(err) {
+
+                resObj.status 		= 'failed'
+                resObj.statusCode  	= 500
+                resObj.error		= err
+                resObj.message 		= 'Unable to login'
+
+			}else{
+
+                resObj.status 		= 'failed'
+                resObj.statusCode  	= 400
+                resObj.message 		= 'Incorrect user email or password'	
+
+			}
+
+			res.status(resObj.statusCode).json(resObj);
+		});
+
 	}
 
 

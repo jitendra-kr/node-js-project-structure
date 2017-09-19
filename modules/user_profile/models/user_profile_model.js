@@ -1,6 +1,7 @@
 const mongoose		= require('mongoose'),
-	schema			= mongoose.Schema,
-	uniqueValidator = require('mongoose-unique-validator');
+	path			= require('path'),
+	helperLib		= require(path.resolve('./config/lib/helper_lib')),
+	schema			= mongoose.Schema;
 
 
 let validateEmail = (email) => {
@@ -36,6 +37,18 @@ let userProfile = new schema({
 		updatedAt: 'updated_at'
 }});
 
-// userProfile.plugin(uniqueValidator);
+
+/*hash password using MD5*/
+userProfile.pre('save', function(next){
+
+	if (this.password){
+		let Crypt = new helperLib.crypt.crypt()
+		this.password = Crypt.hash(this.password)
+	}	
+	next();
+
+})
+
+
 
 module.exports = mongoose.model('userProfileModel', userProfile);	

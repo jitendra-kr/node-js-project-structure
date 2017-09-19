@@ -60,6 +60,5 @@ class ReadDirectory {
 
 
 module.exports = {
-	readDirectory: ReadDirectory,
-	file: path.parse(path.basename(__filename)).name
+	readDirectory: ReadDirectory
 }

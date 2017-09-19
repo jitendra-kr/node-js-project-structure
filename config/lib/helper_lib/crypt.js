@@ -2,6 +2,7 @@ const crypto 			= require('crypto'),
 	path				= require('path'),
 	ENV 				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));;
 
+
 class Crypt {
 
 	constructor() {
@@ -23,6 +24,7 @@ class Crypt {
 	}
 
 	decrypt(data) {
+
 	   let textParts = data.split(':'),
 		   iv = new Buffer(textParts.shift(), 'hex'),
 		   encryptedText = new Buffer(textParts.join(':'), 'hex'),
@@ -32,8 +34,23 @@ class Crypt {
 		  decrypted = Buffer.concat([decrypted, decipher.final()]);
 
 	  return decrypted.toString();
+
 	}
 
+	hash(data) {
+
+		data = crypto.createHash('md5').update(data).digest('hex')
+		return data
+
+	}
+
+	compareHash(data, password) {
+
+		let hash = this.hash(data),
+			isEqual = hash == password;
+		return isEqual
+
+	}
 }
 
 
