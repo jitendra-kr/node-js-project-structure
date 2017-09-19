@@ -1,6 +1,6 @@
 const mongoose 			= require('mongoose')
-	path				= require("path"),
-	chalk			= require('chalk');
+	  path				= require("path"),
+	  chalk				= require('chalk');
 
 
 
