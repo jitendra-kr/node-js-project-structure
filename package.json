@@ -10,6 +10,7 @@
   "author": "Jitendra",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.5.0",
     "body-parser": "^1.17.2",
     "chalk": "^2.1.0",
     "dotenv": "^4.0.0",

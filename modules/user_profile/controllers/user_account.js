@@ -1,4 +1,5 @@
 const path              = require('path'),
+    async               = require('async'),
     helperLib           = require(path.resolve('./config/lib/helper_lib')),
     UserProfileModel    = require('../models/user_profile_model');
 
@@ -16,7 +17,7 @@ exports.register = (req, res) => {
         if (err) {
 
             resObj.status = 'failed'
-            resObj.statusCode = 400
+            resObj.statusCode = 200
             resObj.error = err
             resObj.message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed'
 
@@ -50,11 +51,8 @@ exports.login = (req, res) => {
 
             user.password = undefined
 
-
-            let Jwt = new helperLib.jwt.jwt()
-
+            let Jwt = new helperLib.jwt()
             let buf = new Buffer.from(JSON.stringify(user))
-
 
             resObj.status = 'success'
             resObj.statusCode = 200
@@ -72,7 +70,7 @@ exports.login = (req, res) => {
         } else {
 
             resObj.status = 'failed'
-            resObj.statusCode = 400
+            resObj.statusCode = 200
             resObj.message = 'Incorrect user email or password'
 
         }
@@ -112,7 +110,7 @@ exports.updateProfile = (req, res) => {
         } else {
 
             resObj.status = 'failed'
-            resObj.statusCode = 400
+            resObj.statusCode = 200
             resObj.error = err
             resObj.message = `${data.email} does not exist`
 
@@ -125,17 +123,98 @@ exports.updateProfile = (req, res) => {
 
 exports.changePassword = (req, res) => {
 
-    let emailFromToken = req.tokenInfo.email
 
-    let resObj = {};
+    let conditions = {'email': req.tokenInfo.email }; 
 
-    if (emailFromToken != req.body) {
+    async.waterfall([        
 
-        resObj.status = 'failed'
-        resObj.statusCode = 400
-        resObj.message = 'authentication failed'
+        (cb) => {
 
-    }
+            if (req.body.confirmPassword != req.body.newPassword) {
 
-    res.status(resObj.statusCode).json(resObj);
+                let resObj = {}
+                resObj.status = 'failed'
+                resObj.statusCode = 200
+                resObj.message = 'new password and comfirm password are not equal' 
+                cb(resObj)   
+
+            }else{
+                cb(null)
+            }
+
+        },
+
+        (cb) => {
+
+            UserProfileModel.findOne(conditions, {'password':1, '_id':0}, (err, user) => {
+
+                let Crypt = new helperLib.crypt.crypt()
+
+                let isValid = Crypt.compareHash(req.body.password, user ? user.password : '')
+
+                if (!user || err || !isValid) {
+
+                    let resObj = {}
+                    resObj.status = 'failed'
+                    resObj.statusCode = 200
+                    resObj.error = err 
+                    resObj.message = err ? 'some error occurred under user finding to update password' 
+                                         : !user 
+                                         ? 'user not found' 
+                                         : 'incorrect current password'    
+
+                    cb(resObj)  
+
+                } else {
+
+                    cb(null)  
+                  
+                }
+
+            })
+
+        }, 
+
+        (cb) => {
+
+            let Crypt = new helperLib.crypt.crypt()
+            let update = {password: Crypt.hash(req.body.newPassword)}
+
+            UserProfileModel.update(conditions, update, (err, update) => {
+                console.log(err || update)
+
+                if (update.nModified == 1) {
+
+                    let resObj = {}
+                    resObj.status = 'success'
+                    resObj.statusCode = 200
+                    resObj.message = 'password changed successfully'
+
+                    cb(resObj)                     
+                }else{
+
+                    let resObj = {}
+                    resObj.status = 'failed'
+                    resObj.statusCode = 200
+                    resObj.error = err 
+                    resObj.message = err || 'some error occurred in update password'    
+
+                    cb(resObj)                      
+                }
+
+            });
+
+        }
+        ], (err, final) => {
+
+            let resObj = err || final
+
+            res.status(resObj.statusCode).json(resObj);
+
+        })
+}
+
+
+exports.resetPassword = (req, res) => {
+    
 }

@@ -38,6 +38,4 @@ class Jwt {
 	}	
 }
 
-module.exports = {
-	jwt: Jwt
-}
+module.exports = Jwt
