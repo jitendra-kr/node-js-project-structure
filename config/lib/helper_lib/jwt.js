@@ -7,34 +7,34 @@ const path				= require('path'),
 class Jwt {
 
 	constructor() {
-		this.key = new Buffer(ENV.JWT_KEY).toString('base64')
+		this.key = new Buffer(ENV.JWT_KEY).toString('base64') ;
 	}
 
 	sign(data) {
 
-		let crypt = new Crypt()
-		let payload = crypt.encrypt(data)
+		let crypt = new Crypt() ;
+		let payload = crypt.encrypt(data) ;
 
-		let token = jwtToken.sign(payload, this.key)
+		let token = jwtToken.sign(payload, this.key) ;
 
-		return token		
+		return token ;		
 	}
 
 	verify (token) {
 
-		let decoded = jwtToken.decode(token, {complete: true})
-		let payload = decoded.payload
+		let decoded = jwtToken.decode(token, {complete: true}) ;
+		let payload = decoded.payload ;
 
-		let crypt = new Crypt()
-		let decrypt = crypt.decrypt(payload)
+		let crypt = new Crypt() ;
+		let decrypt = crypt.decrypt(payload) ;
 
 			try{
-				payload = JSON.parse(decrypt) 
+				payload = JSON.parse(decrypt)  ;
 			}catch(e){
-				payload = decrypt
+				payload = decrypt ;
 			}			
 
-		return payload
+		return payload ;
 	}	
 }
 

@@ -11,16 +11,16 @@ module.exports = function (app) {
 	app.use(helmet());
 
 	// parse application/x-www-form-urlencoded
-	app.use(bodyParser.urlencoded({ extended: false }))
+	app.use(bodyParser.urlencoded({ extended: false })) ;
 
 	// parse application/json
-	app.use(bodyParser.json())
+	app.use(bodyParser.json()) ;
 
 	app.engine('html', require('ejs').renderFile);		
 
-	app.set('view engine', 'html')
+	app.set('view engine', 'html') ;
 
-	app.use(express.static(path.join(__dirname, 'views')))
+	app.use(express.static(path.join(__dirname, 'views'))) ;
 
 	// HTTP request logger
 	app.use(morgan('dev'));

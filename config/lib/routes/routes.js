@@ -10,7 +10,7 @@ module.exports = (app) => {
     let dirObj = {}
 
     app.use(expressJWT({
-        secret: new Buffer(ENV.JWT_KEY).toString('base64'),
+        secret: new Buffer(ENV.JWT_KEY).toString('base64')
     }).unless({
         path:[]
     }));
@@ -30,21 +30,21 @@ module.exports = (app) => {
     fs.readdirSync(location)
         .filter((dir) => {
 
-            return fs.statSync(`${location}/${dir}`).isDirectory()
+            return fs.statSync(`${location}/${dir}`).isDirectory() ;
 
         }).forEach((dir, index) => {
 
-            let fileObj
+            let fileObj ;
 
             if (index == 0) {
                 app.get('/', (req, res) => {
-                    res.render('index')
+                    res.render('index');
                 })
             }
 
-            fileObj = require(path.resolve(`./modules/${dir}/routes/routes`))
-
-            app.use(fileObj.base,	fileObj.router)
+            fileObj = require(path.resolve(`./modules/${dir}/routes/routes`)) ;
+            
+            app.use(fileObj.base,	fileObj.router);
 
         });
 
