@@ -7,7 +7,6 @@ const path              = require('path'),
 
 exports.register = (req, res) => {
 
-
     let userProfileModel = new UserProfileModel(req.body)
 
     userProfileModel.save((err, saved) => {

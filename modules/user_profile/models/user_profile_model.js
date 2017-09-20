@@ -39,6 +39,7 @@ let userProfile = new schema({
 
 
 /*hash password using MD5*/
+
 userProfile.pre('save', function(next){
 
 	if (this.password){
@@ -48,7 +49,5 @@ userProfile.pre('save', function(next){
 	next();
 
 })
-
-
 
 module.exports = mongoose.model('userProfileModel', userProfile);	
