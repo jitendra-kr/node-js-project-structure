@@ -15,7 +15,7 @@ class Jwt {
 		let crypt = new Crypt()
 		let payload = crypt.encrypt(data)
 
-		let token = jwtToken.sign(payload, new Buffer(this.key).toString('base64'))
+		let token = jwtToken.sign(payload, this.key)
 
 		return token		
 	}
@@ -36,4 +36,8 @@ class Jwt {
 
 		return payload
 	}	
+}
+
+module.exports = {
+	jwt: Jwt
 }

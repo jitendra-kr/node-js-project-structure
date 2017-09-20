@@ -1,11 +1,31 @@
-const path			= require('path'),
-	  fs 			= require('fs'),
-	  location		= path.resolve('./modules');
+const path			     = require('path'),
+	  fs 			         = require('fs'),
+    expressJWT       = require('express-jwt'),
+    ENV              = require(path.resolve(`./config/env/${process.env.NODE_ENV}`))
+	  location		     = path.resolve('./modules');
 
 
 module.exports = (app) => {
 
     let dirObj = {}
+
+    app.use(expressJWT({
+        secret: new Buffer(ENV.JWT_KEY).toString('base64'),
+    }).unless({
+        path:[]
+    }));
+
+    app.use(function (err, req, res, next) {
+      if (err.name === 'UnauthorizedError') {
+            res.status(401).render('404',{
+                status:'failed',
+                requestType: 'Unauthorized request'
+            });
+      }else{
+        next();
+      }
+
+    });
 
     fs.readdirSync(location)
         .filter((dir) => {
