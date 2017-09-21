@@ -14,7 +14,7 @@ const fileObj 		= ReadDirectory.requireFiles(dir)
 
 router
 	.post('/register', 		  Middleware.validatePassword,							    fileObj.user_account.register)
-	.put('/update', 																	fileObj.user_account.updateProfile)
+	.put('/update', 		  Middleware.decodeToken,     								fileObj.user_account.updateProfile)
 	.post('/login', 																	fileObj.user_account.login)
 	.put('/change-password',  Middleware.decodeToken,   								fileObj.user_account.changePassword)
 	.put('/reset-password',   Middleware.decodeToken,   								fileObj.user_account.resetPassword)
