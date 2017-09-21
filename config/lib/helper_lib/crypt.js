@@ -1,13 +1,13 @@
 const crypto 			= require('crypto'),
 	path				= require('path'),
-	ENV 				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));;
+	ENV 				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
 
 class Crypt {
 
 	constructor() {
-		this.key  = ENV.ENCRYPTION_KEY
-		this.algo = ENV.ENCRYPTION_ALGO
+		this.key  = ENV.ENCRYPTION_KEY ;
+		this.algo = ENV.ENCRYPTION_ALGO ;
 	}
 
 
@@ -40,8 +40,8 @@ class Crypt {
 
 	hash(data) {
 
-		data = crypto.createHash('md5').update(data).digest('hex')
-		return data
+		data = crypto.createHash('md5').update(data).digest('hex');
+		return data;
 
 	}
 
@@ -49,7 +49,7 @@ class Crypt {
 
 		let hash = this.hash(data),
 			isEqual = hash == password;
-		return isEqual
+		return isEqual;
 
 	}
 }

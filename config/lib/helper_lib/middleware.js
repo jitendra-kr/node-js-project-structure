@@ -10,10 +10,11 @@ class Middleware {
 	decodeToken(req, res, next) {
 
 		 let Jwt = new jwt(),
-		 authorization = req.headers.authorization.replace('Bearer ', ''),
-		 decodeToken = Jwt.verify(authorization);
-		 req.tokenInfo = decodeToken
-		next();
+		 	authorization = req.headers.authorization.replace('Bearer ', ''),
+		 	decodeToken = Jwt.verify(authorization);
+		 	
+		 	req.tokenInfo = decodeToken
+			next();
 	}
 
 	//@ citation required
@@ -31,10 +32,10 @@ class Middleware {
 
 			if (length < minLength || length > maxLength || havingSpace || !havingSpecialChar) {
 	            
-	            resObj.status = 'failed'
-	            resObj.statusCode = 200
-	            resObj.hint = 'Password@'
-	            resObj.message = length < minLength 
+	            resObj.status = 'failed' ;
+	            resObj.statusCode = 200  ;
+	            resObj.hint = 'Password@' ;
+	            resObj.message = length < minLength  
 	            				? 'password minimum length should be 8'
 	            				: length > maxLength
 	            				? 'password maximum length should be 12'
@@ -42,10 +43,10 @@ class Middleware {
 	            				? 'password should not contain any space'
 	            				: 'password should have one special character'
 
-	            res.status(resObj.statusCode).json(resObj)
+	            res.status(resObj.statusCode).json(resObj);
 
 			}else{
-				next()		
+				next() ;		
 			}
 		
 	}

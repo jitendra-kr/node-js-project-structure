@@ -7,19 +7,19 @@ class ReadDirectory {
 
 	getFiles(dir, skip){
 
-		let files = fs.readdirSync(dir)	
+		let files = fs.readdirSync(dir)	;
 
 		    files = files.map((file) =>{
-		    	file = path.parse(file).name
-		    	return file
+		    	file = path.parse(file).name ;
+		    	return file ;
 			})
 			.filter(file=>{								
 				if (Array.isArray(skip)) {
-					return skip.indexOf(file) == -1	
+					return skip.indexOf(file) == -1	;
 				}				
-				return true
+				return true ;
 			})
-			return files
+			return files ;
 	}		
 
 	requireFiles(dir, skip) {
@@ -29,7 +29,7 @@ class ReadDirectory {
 
 		 if (Array.isArray(files)) {
 
-			 let fileObj = {}
+			 let fileObj = {} ;
 
 			 files.forEach(file => {
 			 	
@@ -37,17 +37,17 @@ class ReadDirectory {
 
 			 })
 			
-			 return fileObj	
+			 return fileObj	;
 
 		 }else{
 
-		 	throw new Error('file Array or directory not found')
+		 	throw new Error('file Array or directory not found') ;
 
 		 }
 
 		}else{
 
-			throw new Error('directory not received to read and require files')
+			throw new Error('directory not received to read and require files') ;
 
 		}
 	}
