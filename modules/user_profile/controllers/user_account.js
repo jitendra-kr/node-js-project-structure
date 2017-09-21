@@ -30,8 +30,7 @@ exports.register = (req, res) => {
 
         res.status(resObj.statusCode).json(resObj);
 
-    });
-
+    })
 }
 
 
@@ -82,8 +81,18 @@ exports.login = (req, res) => {
 
 exports.updateProfile = (req, res) => {
 
-    let data = req.body,
-        conditions = {'email': data.email };
+    let data = req.body
+        conditions = {'email': data.email }
+    if (data.email != req.tokenInfo.email) {
+
+        let resObj = {};
+            resObj.status = 'failed'
+            resObj.statusCode = 401
+            resObj.auth = 'failed'
+            resObj.message = `${data.email} is not valid email to update this account`
+
+            return res.status(resObj.statusCode).json(resObj);    
+    }
 
     delete data.password
     delete data.email
@@ -111,7 +120,7 @@ exports.updateProfile = (req, res) => {
             resObj.status = 'failed'
             resObj.statusCode = 200
             resObj.error = err
-            resObj.message = `${data.email} does not exist`
+            resObj.message = `${req.tokenInfo.email} does not exist`
 
         }
 

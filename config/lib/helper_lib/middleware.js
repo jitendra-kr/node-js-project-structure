@@ -1,5 +1,5 @@
 const path			= require('path'),
-	jwt = require('./jwt');
+	jwt 			= require('./jwt');
 
 console.log(/[A-Z]/.test('abcSshfskdf'))
 
@@ -17,6 +17,8 @@ class Middleware {
 			next();
 	}
 
+	//@ citation required
+	
 	validatePassword(req, res, next) {
 
 		let format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
@@ -36,9 +38,9 @@ class Middleware {
 	            resObj.message = length < minLength  
 	            				? 'password minimum length should be 8'
 	            				: length > maxLength
-	            				? 'password minimum length should be 12'
+	            				? 'password maximum length should be 12'
 	            				: havingSpace
-	            				? 'password should not contain white space'
+	            				? 'password should not contain any space'
 	            				: 'password should have one special character'
 
 	            res.status(resObj.statusCode).json(resObj);
