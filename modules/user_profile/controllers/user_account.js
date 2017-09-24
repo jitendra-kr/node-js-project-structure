@@ -4,6 +4,14 @@ const path              = require('path'),
     UserProfileModel    = require('../models/user_profile_model');
 
 
+//@ private function for generating responses only
+ function generateResponses(statusCode,status,message){
+                    let resObj = {}
+                    resObj.statusCode = statusCode;
+                    resObj.status = status ;
+                    resObj.message = message;
+                    return resObj;
+    }
 
 exports.register = (req, res) => {
 
@@ -139,7 +147,7 @@ exports.changePassword = (req, res) => {
     async.waterfall([        
 
         (cb) => {
-
+            
             if (req.body.confirmPassword != req.body.newPassword) {
 
                 let resObj = {}
@@ -205,7 +213,7 @@ exports.changePassword = (req, res) => {
 
                     let resObj = {}
                     resObj.status = 'failed'
-                    resObj.statusCode = 200
+                    resObj.statusCode = 400
                     resObj.error = err 
                     resObj.message = err || 'some error occurred in update password'    
 
@@ -226,5 +234,54 @@ exports.changePassword = (req, res) => {
 
 
 exports.resetPassword = (req, res) => {
+/*
+    1. it depends reset link will be sent over email
+
+    2. or forgot password to be get set without sending any `
+
+*/
+
+//@ code according 2.
+    let bodyData = req.tokenInfo,
+        resObj = {};
     
+    //@ finding the user    
+    UserProfileModel.findOne({'email' : bodyData.email}, projection, (err, user) => {
+        //@ if any error 
+        if(err){
+            resObj = generateResponses(500,'failed','Something went wrong ');
+            resObj.error = err;
+        }
+        
+        //@ if user exists
+        if(user){
+        
+            //@ check if password or confirm pasword is same
+            if (req.body.confirmPassword != req.body.newPassword) {
+                resObj = generateResponses(400,'failed','Mismatch password ');
+                res.status(resObj.statusCode).json(resObj);
+            }else{
+
+             let Crypt = new helperLib.crypt.crypt()
+             let passwordUpdate = {password: Crypt.hash(req.body.newPassword)}
+    
+                userProfileModel.update({'email':bodyData.email},passwordUpdate,(err,update)=>{
+                   if (update.nModified == 1) {
+                        resObj = generateResponses(200,'success','Password changed successfully');
+                    }else{
+                        resObj = generateResponses(400,'failed',err || 'some error occurred in update password' );
+                        resObj.error = err 
+                    }
+                    res.status(resObj.statusCode).json(resObj);
+                })   
+            }
+        }
+       
+    })
 }
+
+
+
+ 
+
+
