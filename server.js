@@ -8,7 +8,15 @@ const express		= require('express'),
 	ENV				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 					  require(path.resolve('./config/lib/server'))(server, ENV);
 
+function startServer(){
 
 server.listen(ENV.PORT,  ()=> {
 	console.log(chalk`{green Node Js server running on {green.bold ${ENV.PORT}} port at {green.bold ${ENV.MODE_TYPE}}..}`)
-});	
+	});	
+}
+
+if(require.main == module) {
+	startServer()
+}else{
+	module.exports = startServer;
+}
