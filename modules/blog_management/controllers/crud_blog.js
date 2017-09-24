@@ -8,7 +8,8 @@ class Blog {
 		res.json({status: "blog created"});	
 	}
 
-	read(req, res) {
+	read(req, res, next) {
+		next('hello')
 		res.json({status: "blog content"});	
 	}
 
