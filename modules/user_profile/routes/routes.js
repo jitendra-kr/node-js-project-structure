@@ -13,10 +13,14 @@ const fileObj 		= ReadDirectory.requireFiles(dir)
 
 
 router
+	//@ citation requited to [Register api]
 	.post('/register', 		  Middleware.validatePassword,							    fileObj.user_account.register)
+	
 	.put('/update', 		  Middleware.decodeToken,     								fileObj.user_account.updateProfile)
 	.post('/login', 																	fileObj.user_account.login)
 	.put('/change-password',  Middleware.decodeToken,   								fileObj.user_account.changePassword)
+	
+	//@ citation required ['forgot password' seems more meaningful]
 	.put('/reset-password',   Middleware.decodeToken,   								fileObj.user_account.resetPassword)
 
 
