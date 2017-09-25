@@ -43,11 +43,11 @@ let userProfile = new schema({
 userProfile.pre('save', function(next){
 
 	if (this.password){
-		let Crypt = new helperLib.crypt.crypt()
-		this.password = Crypt.hash(this.password)
+		let Crypt = new helperLib.crypt.crypt();
+		this.password = Crypt.hash(this.password);
 	}	
 	next();
 
-})
+});
 
 module.exports = mongoose.model('userProfileModel', userProfile);	

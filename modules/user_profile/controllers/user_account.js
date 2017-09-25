@@ -5,6 +5,7 @@ const path              = require('path'),
 
 
 //@ private function for generating responses only
+
  function generateResponses(statusCode,status,message){
                     let resObj = {}
                     resObj.statusCode = statusCode;
@@ -15,7 +16,7 @@ const path              = require('path'),
 
 exports.register = (req, res) => {
 
-    let userProfileModel = new UserProfileModel(req.body)
+    let userProfileModel = new UserProfileModel(req.body);
 
     userProfileModel.save((err, saved) => {
 
@@ -23,17 +24,17 @@ exports.register = (req, res) => {
 
         if (err) {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 200
-            resObj.error = err
-            resObj.message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed'
+            resObj.status = 'failed';
+            resObj.statusCode = 200;
+            resObj.error = err;
+            resObj.message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed';
 
         } else {
 
-            resObj.status = 'success'
-            resObj.statusCode = 200
-            resObj.message = 'Account created successfully'
-            resObj.result = saved
+            resObj.status = 'success';
+            resObj.statusCode = 200;
+            resObj.message = 'Account created successfully';
+            resObj.result = saved;
         }
 
         res.status(resObj.statusCode).json(resObj);
@@ -49,35 +50,36 @@ exports.login = (req, res) => {
 
     UserProfileModel.findOne(conditions, projection, (err, user) => {
 
-        let Crypt = new helperLib.crypt.crypt()
-        let isValid = Crypt.compareHash(req.body.password, user ? user.password : '');
-        let resObj = {};
+        let Crypt = new helperLib.crypt.crypt();
+        let isValid = Crypt.compareHash(req.body.password, user ? user.password : ''),
+            resObj = {};
 
         if (user && isValid) {
 
-            user.password = undefined
+            user.password = undefined;
 
-            let Jwt = new helperLib.jwt()
-            let buf = new Buffer.from(JSON.stringify(user))
+            let Jwt = new helperLib.jwt();
+            let buf = new Buffer.from(JSON.stringify(user));
 
-            resObj.status = 'success'
-            resObj.statusCode = 200
-            resObj.message = 'logged in successfully'
-            resObj.result = user
-            resObj.auth = Jwt.sign(buf)
+            resObj.status = 'success';
+            resObj.statusCode = 200;
+            resObj.message = 'logged in successfully';
+            resObj.result = user;
+            resObj.auth = Jwt.sign(buf);
 
         } else if (err) {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 500
-            resObj.error = err
-            resObj.message = 'Unable to login'
+            resObj.status = 'failed';
+            resObj.statusCode = 500;
+            resObj.error = err;
+            resObj.message = 'Unable to login';
 
         } else {
 
             resObj.status = 'failed'
             resObj.statusCode = 400
             resObj.message = 'Incorrect user email or password'
+
 
         }
 
@@ -90,6 +92,7 @@ exports.login = (req, res) => {
 exports.updateProfile = (req, res) => {
 
     let data = req.body,
+// <<<<<<< Updated upstream
         conditions = {'email': data.email },
         resObj = {};
         
@@ -99,12 +102,22 @@ exports.updateProfile = (req, res) => {
             resObj.statusCode = 401
             resObj.auth = 'failed'
             resObj.message = `${data.email} is not valid email to update this account`
+// =======
+//         conditions = {'email': data.email };
+//     if (data.email != req.tokenInfo.email) {
+
+//         let resObj = {};
+//             resObj.status = 'failed';
+//             resObj.statusCode = 401;
+//             resObj.auth = 'failed';
+//             resObj.message = `${data.email} is not valid email to update this account`;
+// >>>>>>> Stashed changes
 
             return res.status(resObj.statusCode).json(resObj);    
     }
 
-    delete data.password
-    delete data.email
+    delete data.password;
+    delete data.email;
 
     
     UserProfileModel.update(conditions, data, (err, update) => {
@@ -113,17 +126,17 @@ exports.updateProfile = (req, res) => {
 
         if (err) {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 500
-            resObj.error = err
-            resObj.message = `update failed for ${data.email}`
+            resObj.status = 'failed';
+            resObj.statusCode = 500;
+            resObj.error = err;
+            resObj.message = `update failed for ${data.email}`;
 
         } else if (update.nModified == 1) {
 
-            resObj.status = 'success'
-            resObj.statusCode = 200
-            resObj.message = 'Account updated successfully'
-            resObj.result = update
+            resObj.status = 'success';
+            resObj.statusCode = 200;
+            resObj.message = 'Account updated successfully';
+            resObj.result = update;
 
         } else {
 
@@ -157,7 +170,7 @@ exports.changePassword = (req, res) => {
                 cb(resObj)   
 
             }else{
-                cb(null)
+                cb(null);
             }
 
         },
@@ -166,7 +179,7 @@ exports.changePassword = (req, res) => {
 
             UserProfileModel.findOne(conditions, {'password':1, '_id':0}, (err, user) => {
 
-                let Crypt = new helperLib.crypt.crypt()
+                let Crypt = new helperLib.crypt.crypt();
 
                 let isValid = Crypt.compareHash(req.body.password, user ? user.password : '')
 
@@ -179,13 +192,13 @@ exports.changePassword = (req, res) => {
                     resObj.message = err ? 'some error occurred under user finding to update password' 
                                          : !user 
                                          ? 'user not found' 
-                                         : 'incorrect current password'    
+                                         : 'incorrect current password';  
 
-                    cb(resObj)  
+                    cb(resObj); 
 
                 } else {
 
-                    cb(null)  
+                    cb(null);  
                   
                 }
 
@@ -195,20 +208,20 @@ exports.changePassword = (req, res) => {
 
         (cb) => {
 
-            let Crypt = new helperLib.crypt.crypt()
-            let update = {password: Crypt.hash(req.body.newPassword)}
+            let Crypt = new helperLib.crypt.crypt();
+            let update = {password: Crypt.hash(req.body.newPassword)};
 
             UserProfileModel.update(conditions, update, (err, update) => {
-                console.log(err || update)
 
                 if (update.nModified == 1) {
 
-                    let resObj = {}
-                    resObj.status = 'success'
-                    resObj.statusCode = 200
-                    resObj.message = 'password changed successfully'
+                    let resObj = {};
+                    resObj.status = 'success';
+                    resObj.statusCode = 200;
+                    resObj.message = 'password changed successfully';
 
-                    cb(resObj)                     
+                    cb(resObj);
+
                 }else{
 
                     let resObj = {}
@@ -217,7 +230,7 @@ exports.changePassword = (req, res) => {
                     resObj.error = err 
                     resObj.message = err || 'some error occurred in update password'    
 
-                    cb(resObj)                      
+                    cb(resObj);                     
                 }
 
             });
@@ -225,7 +238,7 @@ exports.changePassword = (req, res) => {
         }
         ], (err, final) => {
 
-            let resObj = err || final
+            let resObj = err || final;
 
             res.status(resObj.statusCode).json(resObj);
 

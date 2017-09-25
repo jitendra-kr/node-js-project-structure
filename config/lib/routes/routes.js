@@ -12,7 +12,7 @@ module.exports = (app) => {
     app.use(expressJWT({
         secret: new Buffer(ENV.JWT_KEY).toString('base64')
     }).unless({
-        path:[]
+        path:['/']
     }));
 
     app.use(function (err, req, res, next) {

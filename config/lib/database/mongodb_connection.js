@@ -15,7 +15,7 @@ module.exports = function(server, ENV) {
 	let url = `mongodb://${ENV.HOST}/${ENV.MONGODB}` ;
 
 	/*create mongoDB connection*/
-	mongoose.connect(url);
+	mongoose.connect(url, { useMongoClient: true });
 
 	/*if if connection established*/
 	mongoose.connection.on('connected', (err, status) => {
