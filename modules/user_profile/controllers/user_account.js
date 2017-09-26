@@ -1,18 +1,9 @@
+'use strict'
 const path              = require('path'),
     async               = require('async'),
     helperLib           = require(path.resolve('./config/lib/helper_lib')),
     UserProfileModel    = require('../models/user_profile_model');
 
-
-//@ private function for generating responses only
-
- function generateResponses(statusCode,status,message){
-                    let resObj = {}
-                    resObj.statusCode = statusCode;
-                    resObj.status = status ;
-                    resObj.message = message;
-                    return resObj;
-    }
 
 exports.register = (req, res) => {
 
@@ -21,20 +12,17 @@ exports.register = (req, res) => {
     userProfileModel.save((err, saved) => {
 
         let resObj = {};
+        let Common        = new helperLib.common.common();
 
         if (err) {
 
-            resObj.status = 'failed';
-            resObj.statusCode = 200;
-            resObj.error = err;
-            resObj.message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed';
+            let message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed';
+                resObj = Common.generateResponses(400, 'failed', message, err);
 
         } else {
 
-            resObj.status = 'success';
-            resObj.statusCode = 200;
-            resObj.message = 'Account created successfully';
-            resObj.result = saved;
+                resObj = Common.generateResponses(200, 'success', 'Account created successfully', null, saved);
+
         }
 
         res.status(resObj.statusCode).json(resObj);
@@ -50,9 +38,10 @@ exports.login = (req, res) => {
 
     UserProfileModel.findOne(conditions, projection, (err, user) => {
 
-        let Crypt = new helperLib.crypt.crypt();
-        let isValid = Crypt.compareHash(req.body.password, user ? user.password : ''),
-            resObj = {};
+        let Crypt       = new helperLib.crypt.crypt();
+        let isValid     = Crypt.compareHash(req.body.password, user ? user.password : '');
+        let resObj      = {};
+        let Common      = new helperLib.common.common();
 
         if (user && isValid) {
 
@@ -61,25 +50,16 @@ exports.login = (req, res) => {
             let Jwt = new helperLib.jwt();
             let buf = new Buffer.from(JSON.stringify(user));
 
-            resObj.status = 'success';
-            resObj.statusCode = 200;
-            resObj.message = 'logged in successfully';
-            resObj.result = user;
+            resObj = Common.generateResponses(200, 'success', 'logged in successfully', null, user);            
             resObj.auth = Jwt.sign(buf);
 
         } else if (err) {
 
-            resObj.status = 'failed';
-            resObj.statusCode = 500;
-            resObj.error = err;
-            resObj.message = 'Unable to login';
+               resObj = Common.generateResponses(500, 'failed', 'Unable to login', err);            
 
         } else {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 400
-            resObj.message = 'Incorrect user email or password'
-
+            resObj = Common.generateResponses(400, 'failed', 'Incorrect user email or password'); 
 
         }
 
@@ -92,58 +72,34 @@ exports.login = (req, res) => {
 exports.updateProfile = (req, res) => {
 
     let data = req.body,
-// <<<<<<< Updated upstream
         conditions = {'email': data.email },
         resObj = {};
-        
+    let Common      = new helperLib.common.common();    
+
     if (data.email != req.tokenInfo.email) {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 401
-            resObj.auth = 'failed'
-            resObj.message = `${data.email} is not valid email to update this account`
-// =======
-//         conditions = {'email': data.email };
-//     if (data.email != req.tokenInfo.email) {
-
-//         let resObj = {};
-//             resObj.status = 'failed';
-//             resObj.statusCode = 401;
-//             resObj.auth = 'failed';
-//             resObj.message = `${data.email} is not valid email to update this account`;
-// >>>>>>> Stashed changes
+            resObj = Common.generateResponses(401, 'failed', `unauthorized request: account can not update`);             
 
             return res.status(resObj.statusCode).json(resObj);    
+
     }
 
     delete data.password;
     delete data.email;
-
     
     UserProfileModel.update(conditions, data, (err, update) => {
 
-       // let resObj = {};
-
         if (err) {
 
-            resObj.status = 'failed';
-            resObj.statusCode = 500;
-            resObj.error = err;
-            resObj.message = `update failed for ${data.email}`;
+            resObj = Common.generateResponses(500, 'failed', `update failed for ${data.email}`, err);                         
 
         } else if (update.nModified == 1) {
 
-            resObj.status = 'success';
-            resObj.statusCode = 200;
-            resObj.message = 'Account updated successfully';
-            resObj.result = update;
+            resObj = Common.generateResponses(200, 'success', 'Account updated successfully', null, update);                         
 
         } else {
 
-            resObj.status = 'failed'
-            resObj.statusCode = 400
-            resObj.error = err
-            resObj.message = `${req.tokenInfo.email} does not exist`
+            resObj = Common.generateResponses(400, 'failed', `${req.tokenInfo.email} does not exist`, err);                                     
 
         }
 
@@ -155,7 +111,8 @@ exports.updateProfile = (req, res) => {
 exports.changePassword = (req, res) => {
 
 
-    let conditions = {'email': req.tokenInfo.email }; 
+    let conditions = {'email': req.body.email }; 
+    let Common      = new helperLib.common.common();
 
     async.waterfall([        
 
@@ -163,17 +120,28 @@ exports.changePassword = (req, res) => {
             
             if (req.body.confirmPassword != req.body.newPassword) {
 
-                let resObj = {}
-                resObj.status = 'failed'
-                resObj.statusCode = 400
-                resObj.message = 'New password and comfirm password are not equal' 
-                cb(resObj)   
+                let resObj = Common.generateResponses(400, 'failed', 'New password and comfirm password are not equal');                 
+
+                cb(resObj);   
 
             }else{
                 cb(null);
             }
 
         },
+
+        (cb) => {
+            if (req.body.email != req.tokenInfo.email) {
+
+                let resObj = Common.generateResponses(401, 'failed', `unauthorized request: password can not update`);                 
+
+                cb(resObj); 
+
+            }else{
+                cb(null);
+            }
+        },
+
 
         (cb) => {
 
@@ -185,14 +153,12 @@ exports.changePassword = (req, res) => {
 
                 if (!user || err || !isValid) {
 
-                    let resObj = {}
-                    resObj.status = 'failed'
-                    resObj.statusCode = 400
-                    resObj.error = err 
-                    resObj.message = err ? 'some error occurred under user finding to update password' 
+                    let message = err ? 'some error occurred when finding user' 
                                          : !user 
                                          ? 'user not found' 
                                          : 'incorrect current password';  
+
+                    let resObj = Common.generateResponses(400, 'failed', message, err);                                             
 
                     cb(resObj); 
 
@@ -215,20 +181,13 @@ exports.changePassword = (req, res) => {
 
                 if (update.nModified == 1) {
 
-                    let resObj = {};
-                    resObj.status = 'success';
-                    resObj.statusCode = 200;
-                    resObj.message = 'password changed successfully';
+                    let resObj = Common.generateResponses(200, 'success', 'password changed successfully');                     
 
                     cb(resObj);
 
                 }else{
 
-                    let resObj = {}
-                    resObj.status = 'failed'
-                    resObj.statusCode = 400
-                    resObj.error = err 
-                    resObj.message = err || 'some error occurred in update password'    
+                    let resObj = Common.generateResponses(400, 'failed', 'some error occurred in update password', err);     
 
                     cb(resObj);                     
                 }
@@ -257,12 +216,13 @@ exports.resetPassword = (req, res) => {
 //@ code according 2.
     let bodyData = req.tokenInfo,
         resObj = {};
+    let Common      = new helperLib.common.common();    
     
     //@ finding the user    
     UserProfileModel.findOne({'email' : bodyData.email}, projection, (err, user) => {
         //@ if any error 
         if(err){
-            resObj = generateResponses(500,'failed','Something went wrong ');
+            resObj = Common.generateResponses(500,'failed','Something went wrong ');
             resObj.error = err;
         }
         
@@ -271,7 +231,7 @@ exports.resetPassword = (req, res) => {
         
             //@ check if password or confirm pasword is same
             if (req.body.confirmPassword != req.body.newPassword) {
-                resObj = generateResponses(400,'failed','Mismatch password ');
+                resObj = Common.generateResponses(400,'failed','Mismatch password ');
                 res.status(resObj.statusCode).json(resObj);
             }else{
 
@@ -280,9 +240,9 @@ exports.resetPassword = (req, res) => {
     
                 userProfileModel.update({'email':bodyData.email},passwordUpdate,(err,update)=>{
                    if (update.nModified == 1) {
-                        resObj = generateResponses(200,'success','Password changed successfully');
+                        resObj = Common.generateResponses(200,'success','Password changed successfully');
                     }else{
-                        resObj = generateResponses(400,'failed',err || 'some error occurred in update password' );
+                        resObj = Common.generateResponses(400,'failed',err || 'some error occurred in update password' );
                         resObj.error = err 
                     }
                     res.status(resObj.statusCode).json(resObj);
@@ -292,9 +252,3 @@ exports.resetPassword = (req, res) => {
        
     })
 }
-
-
-
- 
-
-
