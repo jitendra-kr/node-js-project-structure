@@ -1,4 +1,5 @@
 const path			= require('path'),
+	fs 				= require('fs'),
 	jwt 			= require('./jwt');
 
 
@@ -47,6 +48,37 @@ class Middleware {
 			}
 		
 	}
+
+
+	writeErrorIntoFile(err, req) {
+
+        let dateObj = new Date(),
+            year = `/${dateObj.getFullYear()+1}/`,
+            month = dateObj.toLocaleString("en-us", {month: "short"}),
+            date = `${dateObj.getDate()}.log`,
+            dirArray = ['logs', year, month],
+            tempDir = '';
+
+        dirArray.forEach((n, i) => {
+            tempDir += dirArray[i]
+            if (!fs.existsSync(tempDir)) {
+                fs.mkdirSync(tempDir)
+            }
+        });
+
+        req.body.password = undefined;
+        
+        let errObj = JSON.stringify({time: dateObj, params: req.params, query: req.query, body: req.body, headers: req.headers, error: err, message: err.message , stack: err.stack })+ "\n" + "\n" + "\n"+ "\n" + "\n";
+
+        let file = `${tempDir}/${date}`;
+
+        if (!fs.existsSync(file)) {
+            fs.writeFileSync(file, errObj);
+        }else{
+            fs.appendFileSync(file, errObj);
+        }		
+	}
+
 }
 
 module.exports = Middleware

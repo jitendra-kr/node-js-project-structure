@@ -1,7 +1,9 @@
 const path			     = require('path'),
 	  fs 			         = require('fs'),
+    os               = require('os'),
     expressJWT       = require('express-jwt'),
     ENV              = require(path.resolve(`./config/env/${process.env.NODE_ENV}`))
+    helperLib        = require(path.resolve('./config/lib/helper_lib')),
 	  location		     = path.resolve('./modules');
 
 
@@ -9,23 +11,31 @@ module.exports = (app) => {
 
     let dirObj = {}
 
+    // validate api with express-jwt
     app.use(expressJWT({
+
         secret: new Buffer(ENV.JWT_KEY).toString('base64')
+
     }).unless({
+
+        // pass api without validating
         path:['/']
     }));
 
+    // error handler for unauthorized routes
     app.use(function (err, req, res, next) {
       if (err.name === 'UnauthorizedError') {
+
             res.status(401).render('404',{
                 status:'failed',
                 requestType: 'Unauthorized request'
             });
+
       }else{
         next();
       }
-
     });
+
 
     fs.readdirSync(location)
         .filter((dir) => {
@@ -42,33 +52,26 @@ module.exports = (app) => {
                 })
             }
 
-            fileObj = require(path.resolve(`./modules/${dir}/routes/routes`)) ;
+            fileObj = require(path.resolve(`./modules/${dir}/routes/routes`));
             
             app.use(fileObj.base,	fileObj.router);
 
         });
 
-   //  app.use((err, req, res, next) => {
 
-   //  	let date 		= new Date(),
-   //  		year 		= `/${date.getFullYear()+1}/`,
-   //  		month 		=  date.toLocaleString("en-us", { month: "short" }),
-   //  		d 			=  `${date.getDate()}.log`
-   //  	    dirArray 	= ['logs', year, month],
-   //  	    tempDir		= '';
+    // error handling middleware
+    app.use((err, req, res, next) => {
 
-   //  	dirArray.forEach((n, i) => {
-   //  		tempDir+=dirArray[i]   
-   //  		if (!fs.existsSync(tempDir)) {
-   //  			fs.mkdirSync(tempDir)
-   //  		} 	
-   //  	});
+        let Common        = new helperLib.common.common();
+        let Middleware    = new helperLib.middleware();
 
-   //  	if (!fs.existsSync(`${tempDir}/${d}`)) {
-			// fs.writeFileSync(`${tempDir}/${d}`, date)		  		
-   //  	}
+        // write error logs into file
+        Middleware.writeErrorIntoFile(err, req);
 
-   //  });     
+        let resObj = Common.generateResponses(500, 'failed', err.message || err.stack);
+
+        res.status(500).json(resObj);
+    });    
 
 }
 
