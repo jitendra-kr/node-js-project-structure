@@ -13,7 +13,7 @@ const fileObj 		= ReadDirectory.requireFiles(dir);
 
 router
 	//@ for future use
-	//.post('/register', 		  Middleware.validatePassword,							    fileObj.user_account.register)	
+	.post('/register', 		  Middleware.validatePassword,							    fileObj.user_account.register)	
 	
 	.put('/update', 		  Middleware.decodeToken,     								fileObj.user_account.updateProfile)
 	.post('/login', 																	fileObj.user_account.login)

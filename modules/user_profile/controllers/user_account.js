@@ -2,7 +2,7 @@
 const path              = require('path'),
     async               = require('async'),
     helperLib           = require(path.resolve('./config/lib/helper_lib')),
-    UserProfileModel    = require('../models/user_profile_model');
+    UserProfileModel    = require('../models/user.profile.model');
 
 
 exports.register = (req, res) => {

@@ -1,7 +1,7 @@
 const mongoose		= require('mongoose'),
 	path			= require('path'),
 	helperLib		= require(path.resolve('./config/lib/helper_lib')),
-	schema			= mongoose.Schema;
+	Schema			= mongoose.Schema;
 
 
 let validateEmail = (email) => {
@@ -9,7 +9,7 @@ let validateEmail = (email) => {
     return re.test(email)
 };
 
-let userProfile = new schema({
+let userProfileSchema = new Schema({
 
 	first_name: {
 		type: String,
@@ -40,7 +40,7 @@ let userProfile = new schema({
 
 /*hash password using MD5*/
 
-userProfile.pre('save', function(next){
+userProfileSchema.pre('save', function(next){
 
 	if (this.password){
 		let Crypt = new helperLib.crypt.crypt();
@@ -50,4 +50,4 @@ userProfile.pre('save', function(next){
 
 });
 
-module.exports = mongoose.model('userProfileModel', userProfile);	
+module.exports = mongoose.model('UserProfileModel', userProfileSchema);	
