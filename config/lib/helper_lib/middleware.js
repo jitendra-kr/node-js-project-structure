@@ -7,6 +7,9 @@ class Middleware {
 
 	constructor(){}
 
+	// fetch jwt token from headers  
+	// decode jwt
+	// insert jwt object into request
 	decodeToken(req, res, next) {
 
 		 let Jwt = new jwt(),
@@ -17,7 +20,7 @@ class Middleware {
 			next();
 	}
 
-	
+	// validate password 
 	validatePassword(req, res, next) {
 
 		let format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
@@ -29,12 +32,14 @@ class Middleware {
 			havingSpecialChar = format.test(password),
 			resObj = {}; 
 
+			// check password length 
+			// password should contain a special character
+			// password should not contain white space
 			if (length < minLength || length > maxLength || havingSpace || !havingSpecialChar) {
 	            
 	            resObj.status = 'failed';
 	            resObj.statusCode = 400;         
 
-	            //@ can be
 	            if(length < minLength || length > maxLength){
 	            	resObj.message = "password length shoud be not be less than " + minLength + " and should not be greater than " +maxLength ;
 	            }else if (havingSpace || !havingSpecialChar){
@@ -49,7 +54,8 @@ class Middleware {
 		
 	}
 
-
+	// append logs into file in json form 
+	// file name will be current date (.log)
 	writeErrorIntoFile(err, req) {
 
         let dateObj = new Date(),
@@ -60,21 +66,30 @@ class Middleware {
             tempDir = '';
 
         dirArray.forEach((n, i) => {
-            tempDir += dirArray[i]
+            tempDir += dirArray[i];
+
+            // if directory does not exist 
+            // create directory
             if (!fs.existsSync(tempDir)) {
                 fs.mkdirSync(tempDir)
             }
         });
 
+        // delete password from body
         req.body.password = undefined;
-        
+
         let errObj = JSON.stringify({time: dateObj, params: req.params, query: req.query, body: req.body, headers: req.headers, error: err, message: err.message , stack: err.stack })+ "\n" + "\n" + "\n"+ "\n" + "\n";
 
         let file = `${tempDir}/${date}`;
 
         if (!fs.existsSync(file)) {
+
+        	// file does not exist
+        	// create file and insert error
             fs.writeFileSync(file, errObj);
         }else{
+
+        	// if file already exist
             fs.appendFileSync(file, errObj);
         }		
 	}

@@ -6,9 +6,10 @@ class Common {
 	generateResponses(statusCode, status, message, error, result){
             let resObj = {}
 
-            if(statusCode) resObj.statusCode = statusCode;
-            if(status) resObj.status = status ;
-            if(message) resObj.message = message;
+            resObj.statusCode = statusCode;
+            resObj.status = status;
+            resObj.message = message;
+            
             if(error) resObj.error = error;
             if(result) resObj.result = result;
 

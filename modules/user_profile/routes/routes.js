@@ -5,10 +5,9 @@ const path			= require('path'),
 
 
 
-let ReadDirectory 	= new helperLib.read_directory.readDirectory()
-let Middleware 		= new helperLib.middleware()
-
-const fileObj 		= ReadDirectory.requireFiles(dir)
+let ReadDirectory 	= new helperLib.read_directory.readDirectory();
+let Middleware 		= new helperLib.middleware();
+const fileObj 		= ReadDirectory.requireFiles(dir);
 
 
 

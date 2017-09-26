@@ -35,7 +35,7 @@ exports.login = (req, res) => {
 
     let conditions = {'email': req.body.email }, 
         projection = {__v: 0, created_at: 0, updated_at: 0 };
-
+        abc
     UserProfileModel.findOne(conditions, projection, (err, user) => {
 
         let Crypt       = new helperLib.crypt.crypt();
