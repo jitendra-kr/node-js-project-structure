@@ -12,8 +12,7 @@ let blogSchema = new Schema({
 		required: [true, 'title is required']
 	},
 	slug: {
-		type: String,
-		required: [true, 'slug is required']		
+		type: String
 	},
 	image: {
 		type: String
@@ -21,6 +20,10 @@ let blogSchema = new Schema({
 	content: {
 		type: String,
 		required: [true, 'content is required']		
+	},
+	visits: {
+		type: Number,
+		default: 0
 	}
 
 }, {

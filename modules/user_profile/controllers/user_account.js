@@ -5,6 +5,7 @@ const path              = require('path'),
     UserProfileModel    = require('../models/user.profile.model');
 
 
+
 exports.register = (req, res) => {
 
     let userProfileModel = new UserProfileModel(req.body);
@@ -34,9 +35,9 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
 
     let conditions = {'email': req.body.email }, 
-        projection = {__v: 0, created_at: 0, updated_at: 0 };
-        abc
-    UserProfileModel.findOne(conditions, projection, (err, user) => {
+        fields = {__v: 0, created_at: 0, updated_at: 0, };
+
+    UserProfileModel.findOne(conditions, fields, (err, user) => {
 
         let Crypt       = new helperLib.crypt.crypt();
         let isValid     = Crypt.compareHash(req.body.password, user ? user.password : '');
@@ -88,7 +89,7 @@ exports.updateProfile = (req, res) => {
     delete data.email;
     
     UserProfileModel.update(conditions, data, (err, update) => {
-
+        console.log(update)
         if (err) {
 
             resObj = Common.generateResponses(500, 'failed', `update failed for ${data.email}`, err);                         
@@ -97,10 +98,12 @@ exports.updateProfile = (req, res) => {
 
             resObj = Common.generateResponses(200, 'success', 'Account updated successfully', null, update);                         
 
-        } else {
+        } else if (update.nModified == 0 && update.n == 1){
 
-            resObj = Common.generateResponses(400, 'failed', `${req.tokenInfo.email} does not exist`, err);                                     
+            resObj = Common.generateResponses(400, 'failed', 'profile can not update due to some technocal reason');                                     
 
+        }else{
+            resObj = Common.generateResponses(400, 'failed', `${req.tokenInfo.email} does not exist`, err);                                                 
         }
 
         res.status(resObj.statusCode).json(resObj);
@@ -250,5 +253,5 @@ exports.resetPassword = (req, res) => {
             }
         }
        
-    })
+    });
 }

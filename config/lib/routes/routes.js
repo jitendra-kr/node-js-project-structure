@@ -48,7 +48,11 @@ module.exports = (app) => {
 
             if (index == 0) {
                 app.get('/', (req, res) => {
-                    res.render('index');
+
+                    res.render('index', {
+                        port: 3005
+                    });
+
                 })
             }
 

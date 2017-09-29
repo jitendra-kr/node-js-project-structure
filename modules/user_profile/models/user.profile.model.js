@@ -9,21 +9,29 @@ let validateEmail = (email) => {
     return re.test(email)
 };
 
+let toLower = (v) => {
+  return v.toLowerCase();
+}
+
+
 let userProfileSchema = new Schema({
 
 	first_name: {
 		type: String,
-		trim: true,
-		required: [true, 'first name is required']
+		trim: true
 	},
 	last_name: {
 		type: String,
-		trim: true,
-		required: [true, 'last name is required']		
+		trim: true		
+	},
+	gender: {
+		type: String, 
+		enum: ["male", "female", "other"]	
 	},
 	email: {
 		type: String,
 		unique: true,
+		set: toLower,
 		trim: true,
 		validate: [validateEmail, 'Please fill a valid email address'],
 		required: [true, 'email is required']
@@ -31,22 +39,48 @@ let userProfileSchema = new Schema({
 	password: {
 		type: String,
 		required: [true, 'password is required']
+	},
+	lastMod: {
+		type: Date
 	}
-}, {timestamps: {
+}, 
+// {
+//   toObject: {virtuals: true },
+//   toJSON: {virtuals: true }
+// },
+{timestamps: {
 		createdAt: 'created_at',
 		updatedAt: 'updated_at'
 }});
 
 
-/*hash password using MD5*/
 
+//@mongoose pre hook(middleware)
 userProfileSchema.pre('save', function(next){
 
-	if (this.password){
+		console.log('hello i am under pre save hook');
+
 		let Crypt = new helperLib.crypt.crypt();
+
+		
+		//@capital first letter of firstname and last name
+		this.first_name = this.first_name.charAt(0).toUpperCase()+this.first_name.slice(1)
+
+		this.last_name = this.last_name.charAt(0).toUpperCase()+this.last_name.slice(1)
+
+		//@hash password using MD5
 		this.password = Crypt.hash(this.password);
-	}	
-	next();
+
+		next();
+
+
+});
+
+//@set virtual to get full name
+userProfileSchema.virtual('full_name').get(function(){
+
+	//@concat first and last name
+	return `${this.first_name} ${this.last_name}`
 
 });
 
