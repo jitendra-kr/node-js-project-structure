@@ -8,6 +8,7 @@ const express		= require('express'),
 	ENV				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 					  require(path.resolve('./config/lib/server'))(server, ENV);
 
+//@ start server 
 function startServer(){
 
 server.listen(ENV.PORT,  ()=> {
@@ -15,8 +16,12 @@ server.listen(ENV.PORT,  ()=> {
 	});	
 }
 
+//@
 if(require.main == module) {
+	//@ run server without cluster module
 	startServer()
 }else{
+
+	//@ export startServer method to run application using cluster module
 	module.exports = startServer;
 }
