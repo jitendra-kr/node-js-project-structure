@@ -20,7 +20,7 @@ module.exports = function (app) {
 
 	app.set('view engine', 'html') ;
 
-	app.use(express.static(path.join(__dirname, 'views'))) ;
+	app.use(express.static(path.resolve('views/')));
 
 	// HTTP request logger
 	app.use(morgan('dev'));
