@@ -6,15 +6,14 @@ const path			= require('path'),
 	helperLib		= require(path.resolve('./config/lib/helper_lib'));
 
 
-let ReadDirectory 	= new helperLib.read_directory.readDirectory()
-
-const fileObj 		= ReadDirectory.requireFiles(dir)
+let ReadDirectory 	= new helperLib.read_directory.readDirectory();
+let fileObj 		= ReadDirectory.requireFiles(dir);
 
 router
-	.post('/create-blog', 						fileObj.crud_blog.blog.create)
-	.get('/read-blog', 							fileObj.crud_blog.blog.read)
-	.put('/update-blog', 						fileObj.crud_blog.blog.update)
-	.delete('/delete-blog', 					fileObj.crud_blog.blog.delete)
+	.post('/create-blog', 						fileObj.crud_blog.create)
+	.get('/read-blog', 							fileObj.crud_blog.read)
+	.put('/update-blog', 						fileObj.crud_blog.update)
+	.delete('/delete-blog', 					fileObj.crud_blog.delete);
 
 
 module.exports = {
