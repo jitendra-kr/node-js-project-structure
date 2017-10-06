@@ -1,28 +1,22 @@
 const path = require('path');
 
-class Blog {
+module.exports = {
 
-	constructor(){}
-
-	create(req, res) {
+	create: (req, res) => {
 		res.json({status: "blog created"});	
-	}
+	},
 
-	read(req, res, next) {
+	read: (req, res, next) => {
 		next('hello')
 		res.json({status: "blog content"});	
-	}
+	},
 
-	update(req, res) {
+	update: (req, res) => {
 		res.json({status: "blog updated"});	
-	}
+	},
 
-	delete(req, res) {
+	delete: (req, res) => {
 		res.json({status: "blog deleted"});	
 	}
 
-}
-
-module.exports = {
-	blog: new Blog()
 }
