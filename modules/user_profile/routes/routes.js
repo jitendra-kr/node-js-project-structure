@@ -7,7 +7,7 @@ const path			= require('path'),
 
 let ReadDirectory 	= new helperLib.read_directory.readDirectory();
 let Middleware 		= new helperLib.middleware();
-const fileObj 		= ReadDirectory.requireFiles(dir);
+let fileObj 		= ReadDirectory.requireFiles(dir);
 
 
 
@@ -18,7 +18,7 @@ router
 	.put('/update', 		  Middleware.decodeToken,     								fileObj.user_account.updateProfile)
 	.post('/login', 																	fileObj.user_account.login)
 	.put('/change-password',  Middleware.decodeToken,   								fileObj.user_account.changePassword)
-	.put('/forgot-password',   Middleware.decodeToken,   								fileObj.user_account.resetPassword)
+	.put('/forgot-password',   Middleware.decodeToken,   								fileObj.user_account.resetPassword);
 
 
 module.exports = {
