@@ -13,7 +13,7 @@ module.exports = (app) => {
 
     //@ validate api with express-jwt
     app.use(expressJWT({
-        secret: new Buffer(ENV.JWT_KEY).toString('base64');
+        secret: new Buffer(ENV.JWT_KEY).toString('base64')
     }).unless({
         //@ pass api without validating
         path:['/']
