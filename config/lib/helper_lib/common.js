@@ -1,7 +1,6 @@
 
 
 class Common {
-	constructor(){}
 
 	generateResponses(statusCode, status, message, error, result){
             let resObj = {}
@@ -16,6 +15,28 @@ class Common {
             return resObj;		
 	}
 
+      validateArgument(obj, requiredParams) {
+
+            if (typeof obj === 'object' && Array.isArray(requiredParams)) {
+
+                  let notFound = [];
+                  let property = Object.keys(obj);
+                  
+                  requiredParams.forEach((p) => {
+                        if(property.indexOf(p) == -1){
+                              notFound.push(p)
+                        }
+                  });
+
+                  return notFound;
+
+            }else {
+                  return 'ERROR: First argument should be object and second array';
+            }
+
+            
+
+      }
 }
 
 module.exports = {

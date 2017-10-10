@@ -35,14 +35,24 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
 
     let conditions = {'email': req.body.email }, 
+        requiredParams = ['email', 'password'],
         fields = {__v: 0, created_at: 0, updated_at: 0, };
+
+    let Common = new helperLib.common.common();
+    let validator = Common.validateArgument(req.body, requiredParams);    
+
+    if (validator.length>0) {
+        let resObj      = {};
+        resObj = Common.generateResponses(400, 'failed', `${validator.join(', ')} ${helperLib.messages.absent}`); 
+        return res.status(resObj.statusCode).json(resObj);
+
+    }
 
     UserProfileModel.findOne(conditions, fields, (err, user) => {
 
         let Crypt       = new helperLib.crypt.crypt();
         let isValid     = Crypt.compareHash(req.body.password, user ? user.password : '');
         let resObj      = {};
-        let Common      = new helperLib.common.common();
 
         if (user && isValid) {
 
