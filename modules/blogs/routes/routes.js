@@ -10,10 +10,10 @@ let ReadDirectory 	= new helperLib.read_directory.readDirectory();
 let fileObj 		= ReadDirectory.requireFiles(dir);
 
 router
-	.post('/create-blog', 						fileObj.crud_blog.create)
-	.get('/read-blog', 							fileObj.crud_blog.read)
-	.put('/update-blog', 						fileObj.crud_blog.update)
-	.delete('/delete-blog', 					fileObj.crud_blog.delete);
+	.post('/create-blog', 						fileObj['crud.blog'].create)
+	.get('/read-blog', 							fileObj['crud.blog'].read)
+	.put('/update-blog', 						fileObj['crud.blog'].update)
+	.delete('/delete-blog', 					fileObj['crud.blog'].delete);
 
 
 module.exports = {
