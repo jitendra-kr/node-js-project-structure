@@ -61,8 +61,6 @@ let userProfileSchema = new Schema({
 //@mongoose pre hook(middleware)
 userProfileSchema.pre('save', function(next){
 
-		console.log('hello i am under pre save hook');
-
 		let Crypt = new helperLib.crypt.crypt();
 
 		
