@@ -4,6 +4,7 @@ const path			     = require('path'),
     expressJWT           = require('express-jwt'),
     ENV                  = require(path.resolve(`./config/env/${process.env.NODE_ENV}`))
     helperLib            = require(path.resolve('./config/lib/helper_lib')),
+    unlessRoutes         = require('./unless.routes'),
 	location		     = path.resolve('./modules');
 
 
@@ -16,7 +17,7 @@ module.exports = (app) => {
         secret: new Buffer(ENV.JWT_KEY).toString('base64')
     }).unless({
         //@ pass api without validating
-        path:['/']
+        path: unlessRoutes
     }));
 
     //@ error handler for unauthorized routes

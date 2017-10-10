@@ -51,16 +51,16 @@ exports.login = (req, res) => {
             let Jwt = new helperLib.jwt();
             let buf = new Buffer.from(JSON.stringify(user));
 
-            resObj = Common.generateResponses(200, 'success', 'logged in successfully', null, user);            
+            resObj = Common.generateResponses(200, 'success', helperLib.messages.loggedInSuccess, null, user);            
             resObj.auth = Jwt.sign(buf);
 
         } else if (err) {
 
-               resObj = Common.generateResponses(500, 'failed', 'Unable to login', err);            
+               resObj = Common.generateResponses(500, 'failed', helperLib.messages.unableTologin, err);            
 
         } else {
 
-            resObj = Common.generateResponses(400, 'failed', 'Incorrect user email or password'); 
+            resObj = Common.generateResponses(400, 'failed', helperLib.messages.incorrectLoginDetail); 
 
         }
 
