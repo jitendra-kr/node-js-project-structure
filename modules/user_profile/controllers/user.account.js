@@ -13,17 +13,13 @@ exports.register = (req, res) => {
     userProfileModel.save((err, saved) => {
 
         let resObj = {};
-        let Common        = new helperLib.common.common();
+        let Common = new helperLib.common.common();
 
         if (err) {
-
-            let message = err.code == '11000' ? `${req.body.email} already taken` : 'Registration failed';
+            let message = err.code == '11000' ? `${req.body.email} ${helperLib.messages.alreadyTaken}` : 'Registration failed';
                 resObj = Common.generateResponses(400, 'failed', message, err);
-
         } else {
-
-                resObj = Common.generateResponses(200, 'success', 'Account created successfully', null, saved);
-
+                resObj = Common.generateResponses(200, 'success', helperLib.messages.accoundCreated, null, saved);
         }
 
         res.status(resObj.statusCode).json(resObj);

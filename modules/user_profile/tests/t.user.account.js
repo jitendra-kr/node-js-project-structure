@@ -10,9 +10,49 @@ const path		= require('path'),
 
 chai.use(chaiHttp);
 
+let user = {first_name: 'jimmy', last_name: 'rajput', gender: 'male', email: 'jimmy@gmail.com', password: 'JiMmy!1#'},
+	baseUrl = '/api/user-profile';
+
+describe('POST /register', () => {
+
+	let url = `${baseUrl}/register`;
+
+	it('it should register successfully', (done) => {
+
+		chai.request(server)
+			.post(url)
+			.send(user)
+			.end((err, res) => {
+				console.log(res.body);
+				res.should.have.status(200);
+				res.body.should.be.a('object');
+				res.body.should.have.property('message').equal(helperLib.messages.accoundCreated);
+				res.body.should.have.property('status').equal('success');
+				done();
+			});
+	});
+
+	it('it should not register with already used email', (done) => {
+
+		chai.request(server)
+			.post(url)
+			.send(user)
+			.end((err, res) => {
+				console.log(res.body);
+				res.should.have.status(400);
+				res.body.should.be.a('object');
+				res.body.should.have.property('message').to.match(new RegExp(helperLib.messages.alreadyTaken));
+				res.body.should.have.property('status').equal('failed');
+				done();
+			});		
+	});
+
+
+});
+
 describe('POST /login', () => {
 
-	let url = '/api/user-profile/login';
+	let url =  `${baseUrl}/login`;
 
 	it('it should failed without email or password', (done) => {
 

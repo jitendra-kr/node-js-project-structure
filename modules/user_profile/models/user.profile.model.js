@@ -36,12 +36,15 @@ let userProfileSchema = new Schema({
 		validate: [validateEmail, 'Please fill a valid email address'],
 		required: [true, 'email is required']
 	},
+	verified: {
+		type: Number,
+		enum: [0, 1],
+		default: 0
+
+	},
 	password: {
 		type: String,
 		required: [true, 'password is required']
-	},
-	lastMod: {
-		type: Date
 	}
 }, 
 // {
@@ -64,9 +67,9 @@ userProfileSchema.pre('save', function(next){
 
 		
 		//@capital first letter of firstname and last name
-		this.first_name = this.first_name.charAt(0).toUpperCase()+this.first_name.slice(1)
+		if (this.first_name) this.first_name = this.first_name.charAt(0).toUpperCase()+this.first_name.slice(1)
 
-		this.last_name = this.last_name.charAt(0).toUpperCase()+this.last_name.slice(1)
+		if (this.last_name) this.last_name = this.last_name.charAt(0).toUpperCase()+this.last_name.slice(1)
 
 		//@hash password using MD5
 		this.password = Crypt.hash(this.password);
