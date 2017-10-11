@@ -20,6 +20,7 @@ exports.register = (req, res) => {
             let message = err.code == '11000' ? `${req.body.email} ${helperLib.messages.alreadyTaken}` : 'Registration failed';
                 resObj = Common.generateResponses(400, 'failed', message, err);
         } else {
+                saved.password = undefined;
                 resObj = Common.generateResponses(200, 'success', helperLib.messages.accoundCreated, null, saved);
         }
 
