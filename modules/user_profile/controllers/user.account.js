@@ -10,6 +10,7 @@ exports.register = (req, res) => {
 
     let userProfileModel = new UserProfileModel(req.body);
 
+    //@ save object to database
     userProfileModel.save((err, saved) => {
 
         let resObj = {};
@@ -36,9 +37,10 @@ exports.login = (req, res) => {
         fields = {__v: 0, created_at: 0, updated_at: 0, };
 
     let Common = new helperLib.common.common();
-    let validator = Common.validateArgument(req.body, requiredParams);    
 
     //@ check if required properties are missing
+    let validator = Common.validateArgument(req.body, requiredParams);    
+
     if (validator.length>0) {        
         resObj = Common.generateResponses(400, 'failed', `${validator.join(', ')} ${helperLib.messages.absent}`); 
         return res.status(resObj.statusCode).json(resObj);
@@ -141,6 +143,7 @@ exports.changePassword = (req, res) => {
 
         (cb) => {
             
+            //@ check new password with confirm password 
             if (req.body.confirmPassword != req.body.newPassword) {
 
                 let resObj = Common.generateResponses(400, 'failed', 'New password and comfirm password are not equal');                 
@@ -154,6 +157,8 @@ exports.changePassword = (req, res) => {
         },
 
         (cb) => {
+            //@ unauthorized request
+            //@ if user make a request by stealing another user`s token            
             if (req.body.email != req.tokenInfo.email) {
 
                 let resObj = Common.generateResponses(401, 'failed', `unauthorized request: password can not update`);                 
@@ -168,15 +173,17 @@ exports.changePassword = (req, res) => {
 
         (cb) => {
 
+            //@ check if user exists or not
             UserProfileModel.findOne(conditions, {'password':1, '_id':0}, (err, user) => {
 
                 let Crypt = new helperLib.crypt.crypt();
 
+                //@ match password
                 let isValid = Crypt.compareHash(req.body.password, user ? user.password : '')
 
                 if (!user || err || !isValid) {
 
-                    let message = err ? 'some error occurred when finding user' 
+                    let message = err ? 'something went wrong when finding user' 
                                          : !user 
                                          ? 'user not found' 
                                          : 'incorrect current password';  
@@ -200,6 +207,7 @@ exports.changePassword = (req, res) => {
             let Crypt = new helperLib.crypt.crypt();
             let update = {password: Crypt.hash(req.body.newPassword)};
 
+            //@ update user password
             UserProfileModel.update(conditions, update, (err, update) => {
 
                 if (update.nModified == 1) {
