@@ -1,3 +1,4 @@
 # ignore external packages
 /node_modules
 /logs
+.env

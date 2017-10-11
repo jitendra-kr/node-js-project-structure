@@ -134,7 +134,6 @@ describe('POST /login', () => {
 	it('it should loggedin successfully', (done) => {
 
 		user.password = password;
-
 		chai.request(server)
 			.post(url)
 			.send(user)
@@ -166,13 +165,10 @@ describe('POST /login', () => {
 
 	it('it should not loggedin with incorrect login credentials', (done) => {
 
-		let incorrectLogin = {
-			email: 'incorrectemail@incorrect.com',
-			password: '<iNcOrReCt!PaSsWoRd>'
-		}
+		user.email = 'incorrectemail@incorrect.com';
 		chai.request(server)
 			.post(url)
-			.send(incorrectLogin)
+			.send(user)
 			.end((err, res) => {
 				res.body.should.have.property('message').equal(helperLib.messages.incorrectLoginDetail);
 				res.should.have.status(400);

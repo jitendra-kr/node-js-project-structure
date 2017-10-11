@@ -1,4 +1,8 @@
-# Simple NodeJs Project Structure with express
+# NodeJs Project Structure with express
+
+# create .env file
+	
+end paste NODE_ENV=local
 
 # How to run-
 
