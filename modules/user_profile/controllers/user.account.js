@@ -15,10 +15,9 @@ exports.register = (req, res) => {
 
         let resObj = {};
         let Common = new helperLib.common.common();
-
         if (err) {
             let message = err.code == '11000' ? `${req.body.email} ${helperLib.messages.alreadyTaken}` : 'Registration failed';
-                resObj = Common.generateResponses(400, 'failed', message, err);
+                resObj = Common.generateResponses(400, 'failed', message, err.code == '11000'? null : err);
         } else {
                 saved.password = undefined;
                 resObj = Common.generateResponses(200, 'success', helperLib.messages.accoundCreated, null, saved);
@@ -26,7 +25,7 @@ exports.register = (req, res) => {
 
         res.status(resObj.statusCode).json(resObj);
 
-    })
+    });
 }
 
 
@@ -146,26 +145,19 @@ exports.changePassword = (req, res) => {
             
             //@ check new password with confirm password 
             if (req.body.confirmPassword != req.body.newPassword) {
-
                 let resObj = Common.generateResponses(400, 'failed', 'New password and comfirm password are not equal');                 
-
-                cb(resObj);   
-
+                cb(resObj);  
             }else{
                 cb(null);
             }
-
         },
 
         (cb) => {
             //@ unauthorized request
             //@ if user make a request by stealing another user`s token            
             if (req.body.email != req.tokenInfo.email) {
-
                 let resObj = Common.generateResponses(401, 'failed', `unauthorized request: password can not update`);                 
-
-                cb(resObj); 
-
+                cb(resObj);
             }else{
                 cb(null);
             }
@@ -183,24 +175,16 @@ exports.changePassword = (req, res) => {
                 let isValid = Crypt.compareHash(req.body.password, user ? user.password : '')
 
                 if (!user || err || !isValid) {
-
                     let message = err ? 'something went wrong when finding user' 
                                          : !user 
                                          ? 'user not found' 
-                                         : 'incorrect current password';  
-
-                    let resObj = Common.generateResponses(400, 'failed', message, err);                                             
-
+                                         : 'incorrect current password'; 
+                    let resObj = Common.generateResponses(400, 'failed', message, err);                                            
                     cb(resObj); 
-
                 } else {
-
-                    cb(null);  
-                  
+                    cb(null);                    
                 }
-
-            })
-
+            });
         }, 
 
         (cb) => {
@@ -210,29 +194,18 @@ exports.changePassword = (req, res) => {
 
             //@ update user password
             UserProfileModel.update(conditions, update, (err, update) => {
-
                 if (update.nModified == 1) {
-
                     let resObj = Common.generateResponses(200, 'success', 'password changed successfully');                     
-
                     cb(resObj);
-
                 }else{
-
                     let resObj = Common.generateResponses(400, 'failed', 'some error occurred in update password', err);     
-
                     cb(resObj);                     
                 }
-
             });
-
-        }
-        ], (err, final) => {
+        }], (err, final) => {
 
             let resObj = err || final;
-
             res.status(resObj.statusCode).json(resObj);
-
         })
 }
 
