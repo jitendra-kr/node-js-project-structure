@@ -2,7 +2,9 @@
 
 # create .env file
 	
-end paste NODE_ENV=local
+paste 
+
+NODE_ENV=local
 
 # How to run-
 
