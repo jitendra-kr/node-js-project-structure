@@ -32,32 +32,36 @@ exports.login = (req, res) => {
 
     let conditions = {'email': req.body.email }, 
         requiredParams = ['email', 'password'],
+        resObj      = {},
         fields = {__v: 0, created_at: 0, updated_at: 0, };
 
     let Common = new helperLib.common.common();
     let validator = Common.validateArgument(req.body, requiredParams);    
 
-    if (validator.length>0) {
-        let resObj      = {};
+    //@ check if required properties are missing
+    if (validator.length>0) {        
         resObj = Common.generateResponses(400, 'failed', `${validator.join(', ')} ${helperLib.messages.absent}`); 
         return res.status(resObj.statusCode).json(resObj);
-
     }
 
     UserProfileModel.findOne(conditions, fields, (err, user) => {
 
         let Crypt       = new helperLib.crypt.crypt();
-        let isValid     = Crypt.compareHash(req.body.password, user ? user.password : '');
-        let resObj      = {};
+
+        //@ compare password with hash
+        let isValid     = Crypt.compareHash(req.body.password, user ? user.password : '');        
 
         if (user && isValid) {
 
-            user.password = undefined;
+            //@ delete password from user object for security
+            user.password = undefined;      
 
             let Jwt = new helperLib.jwt();
             let buf = new Buffer.from(JSON.stringify(user));
 
             resObj = Common.generateResponses(200, 'success', helperLib.messages.loggedInSuccess, null, user);            
+            
+            //@ sign token with user data
             resObj.auth = Jwt.sign(buf);
 
         } else if (err) {
@@ -66,6 +70,7 @@ exports.login = (req, res) => {
 
         } else {
 
+            //@ incorrect login credentials
             resObj = Common.generateResponses(400, 'failed', helperLib.messages.incorrectLoginDetail); 
 
         }
@@ -83,23 +88,24 @@ exports.updateProfile = (req, res) => {
         conditions = {'email': data.email },
         resObj = {};       
 
+    //@ unauthorized request
+    //@ if user make a request by stealing another user`s token
     if (data.email != req.tokenInfo.email) {
-
             resObj = Common.generateResponses(401, 'failed', `unauthorized request: account can not update`);             
-
-            return res.status(resObj.statusCode).json(resObj);    
-
+            return res.status(resObj.statusCode).json(resObj);
     }
 
+     //@ delete email and password from data object 
+     //@ because it is normal profile update 
+     //@ not email or password update
+     //@ here we are not allowing user to update 
+     //@ email and password in this method
     delete data.password;
     delete data.email;
 
     if (Object.keys(data).length === 0) {
-
-            resObj = Common.generateResponses(400, 'failed', 'fields not found to update');             
-
-            return res.status(resObj.statusCode).json(resObj);    
-
+            resObj = Common.generateResponses(400, 'failed', 'data not found to update');           
+            return res.status(resObj.statusCode).json(resObj);   
     }
 
     UserProfileModel.update(conditions, data, (err, update) => {
