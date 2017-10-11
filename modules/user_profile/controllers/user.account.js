@@ -123,7 +123,7 @@ exports.updateProfile = (req, res) => {
 
         } else if (update.nModified == 0 && update.n == 1){
 
-            resObj = Common.generateResponses(400, 'failed', 'profile can not update due to some technocal reason');                                     
+            resObj = Common.generateResponses(400, 'failed', 'profile can not update due to some technical reason');                                     
 
         }else{
             resObj = Common.generateResponses(400, 'failed', `${req.tokenInfo.email} does not exist`, err);                                                 
