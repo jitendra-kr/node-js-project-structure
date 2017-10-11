@@ -47,7 +47,7 @@ module.exports = (app) => {
         });
 
 
-    //@ error handling middleware
+    //@ global error handling middleware
     app.use((err, req, res, next) => {
 
         let Common        = new helperLib.common.common();

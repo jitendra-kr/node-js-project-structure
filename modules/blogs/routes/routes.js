@@ -7,8 +7,12 @@ const path			= require('path'),
 
 
 let ReadDirectory 	= new helperLib.read_directory.readDirectory();
+
+//@ require all controllers for this module
 let fileObj 		= ReadDirectory.requireFiles(dir);
 
+
+//@ routes mapping
 router
 	.post('/create-blog', 						fileObj['crud.blog'].create)
 	.get('/read-blog', 							fileObj['crud.blog'].read)

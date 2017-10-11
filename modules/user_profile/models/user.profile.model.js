@@ -47,10 +47,7 @@ let userProfileSchema = new Schema({
 		required: [true, 'password is required']
 	}
 }, 
-// {
-//   toObject: {virtuals: true },
-//   toJSON: {virtuals: true }
-// },
+
 {timestamps: {
 		createdAt: 'created_at',
 		updatedAt: 'updated_at'
@@ -58,7 +55,7 @@ let userProfileSchema = new Schema({
 
 
 
-//@mongoose pre hook(middleware)
+//@ mongoose pre hook(middleware)
 userProfileSchema.pre('save', function(next){
 
 		let Crypt = new helperLib.crypt.crypt();
@@ -77,7 +74,7 @@ userProfileSchema.pre('save', function(next){
 
 });
 
-//@set virtual to get full name
+//@ virtual to get full name
 userProfileSchema.virtual('full_name').get(function(){
 
 	//@concat first and last name
