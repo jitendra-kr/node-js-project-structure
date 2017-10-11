@@ -78,10 +78,10 @@ exports.login = (req, res) => {
 
 exports.updateProfile = (req, res) => {
 
+    let Common      = new helperLib.common.common(); 
     let data = req.body,
         conditions = {'email': data.email },
-        resObj = {};
-    let Common      = new helperLib.common.common();    
+        resObj = {};       
 
     if (data.email != req.tokenInfo.email) {
 
@@ -93,9 +93,17 @@ exports.updateProfile = (req, res) => {
 
     delete data.password;
     delete data.email;
-    
+
+    if (Object.keys(data).length === 0) {
+
+            resObj = Common.generateResponses(400, 'failed', 'fields not found to update');             
+
+            return res.status(resObj.statusCode).json(resObj);    
+
+    }
+
     UserProfileModel.update(conditions, data, (err, update) => {
-        console.log(update)
+
         if (err) {
 
             resObj = Common.generateResponses(500, 'failed', `update failed for ${data.email}`, err);                         

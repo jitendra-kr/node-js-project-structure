@@ -1,15 +1,15 @@
 const path			= require('path'),
 	fs 				= require('fs'),
+	
 	jwt 			= require('./jwt');
+
 
 
 class Middleware {
 
-	constructor(){}
-
-	// fetch jwt token from headers  
-	// decode jwt
-	// insert jwt object into request
+	//@ fetch jwt token from headers  
+	//@ decode jwt
+	//@ insert jwt object into request
 	decodeToken(req, res, next) {
 
 		 let Jwt = new jwt(),
@@ -20,31 +20,38 @@ class Middleware {
 			next();
 	}
 
-	// validate password 
+	//@ validate password 
 	validatePassword(req, res, next) {
 
-		let format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
-			password = req.body.password,
-			length = password.length,
+		let helperLib       = require(path.resolve('./config/lib/helper_lib')),
+		    format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/,
+			resObj = {},
+			password = req.body.password;
+
+			resObj.status = 'failed';
+			resObj.statusCode = 400;			
+
+			//@ if password not found 
+			if (!password) {
+				resObj.message = helperLib.messages.passwordNotFound;
+				res.status(resObj.statusCode).json(resObj);
+			}
+			
+		let length = password.length,
 			minLength = 8,
 			maxLength = 12,
 			havingSpace = /\s/g.test(password),
-			havingSpecialChar = format.test(password),
-			resObj = {}; 
+			havingSpecialChar = format.test(password); 
 
-			// check password length 
-			// password should contain a special character
-			// password should not contain white space
-			if (length < minLength || length > maxLength || havingSpace || !havingSpecialChar) {
-	            
-	            resObj.status = 'failed';
-	            resObj.statusCode = 400;         
+			//@ check password length 
+			//@ password should contain a special character
+			//@ password should not contain white space
+			if (length < minLength || length > maxLength || havingSpace || !havingSpecialChar) {          
 
-	            if(length < minLength || length > maxLength){
-	            	resObj.message = "password length shoud be not be less than " + minLength + " and should not be greater than " +maxLength ;
-	            }else if (havingSpace || !havingSpecialChar){
-	            	resObj.message = "password should not contain any spaces or special character ";
-	            }
+				resObj.message = length < minLength ? "password length shoud be not be less than " + minLength
+								 : length > maxLength ? "password should not be greater than " +maxLength
+								 : havingSpace ? "password should not contain any spaces"
+								 : "password should contain minimum one special character ";
 
 	            res.status(resObj.statusCode).json(resObj);
 	            
@@ -54,8 +61,8 @@ class Middleware {
 		
 	}
 
-	// append logs into file in json form 
-	// file name will be current date (.log)
+	//@ append logs into file in json form 
+	//@ file name will be current date (.log)
 	writeErrorIntoFile(err, req) {
 
         let dateObj = new Date(),
