@@ -1,7 +1,7 @@
 {
   "name": "jitendra",
   "version": "1.0.0",
-  "description": "Basically i tried to use class in node Js code",
+  "description": "NodeJs project",
   "main": "server.js",
   "scripts": {
     "test": "mocha --timeout=7000",

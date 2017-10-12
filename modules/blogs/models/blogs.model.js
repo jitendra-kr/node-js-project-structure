@@ -24,6 +24,14 @@ let blogSchema = new Schema({
 	visits: {
 		type: Number,
 		default: 0
+	},
+	category: [{
+		type: Schema.Types.ObjectId,
+		ref: ''	
+	}],
+	status: {
+		type: Number,
+		default: 0
 	}
 
 }, {
