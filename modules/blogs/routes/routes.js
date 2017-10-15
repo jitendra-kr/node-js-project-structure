@@ -1,4 +1,4 @@
-
+	
 const path			= require('path'),
 	fs 				= require('fs'),
 	router 			= require('express').Router(),
@@ -14,10 +14,11 @@ let fileObj 		= ReadDirectory.requireFiles(dir);
 
 //@ routes mapping
 router
-	.post('/create-blog', 						fileObj['crud.blog'].create)
-	.get('/read-blog', 							fileObj['crud.blog'].read)
-	.put('/update-blog', 						fileObj['crud.blog'].update)
-	.delete('/delete-blog', 					fileObj['crud.blog'].delete);
+	.post('/create-blog', 									fileObj['crud.blog'].create)
+	.get('/read-blog/:blog_id', 							fileObj['crud.blog'].read)
+	.put('/:blog_id/update-blog', 							fileObj['crud.blog'].update)
+	.put('/:blog_id/soft-delete-blog', 						fileObj['crud.blog'].softDelete)
+	.delete('/:blog_id/delete-blog', 						fileObj['crud.blog'].finalDelete);
 
 
 module.exports = {
