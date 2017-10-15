@@ -20,6 +20,11 @@ router
 	.put('/:blog_id/soft-delete-blog', 						fileObj['crud.blog'].softDelete)
 	.delete('/:blog_id/delete-blog', 						fileObj['crud.blog'].finalDelete);
 
+	.post('/category/add',									fileObj['crud.category'].addCategory)
+	.get('/category/all',									)
+	.put('/category/:category_id/update',					fileObj['crud.category'.updateThisCategory])
+	.put('/category/:category_id/status',					fileObj['crud.category'].categoryStatus)
+	//@ ../status?make=hide/unhide 
 
 module.exports = {
 	router: router,
