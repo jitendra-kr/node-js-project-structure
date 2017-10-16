@@ -3,5 +3,6 @@
 module.exports = [
 					'/',
 					/\/login/,
-					/\/register/
+					/\/register/,
+					/\/favicon\.ico/
 				]

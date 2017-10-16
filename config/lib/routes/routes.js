@@ -10,7 +10,10 @@ const path			     = require('path'),
 
 module.exports = (app) => {
 
-    let dirObj = {}
+
+
+
+    let dirObj = {};
 
     //@ validate api with express-jwt
     app.use(expressJWT({
