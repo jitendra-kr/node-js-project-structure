@@ -24,7 +24,7 @@ module.exports = {
 			Common      = new helperLib.common.common(),
 			resObj		= {};
 
-		blogModel.findONe({'_id':blogId},(err,blog)=>{
+		blogModel.findOne({'_id':blogId},(err,blog)=>{
 			if(err){
 				resObj = Common.generateResponses(500,'failed','Something went wrong');
 				resObj.error = err;
@@ -33,8 +33,10 @@ module.exports = {
 
 			//@ i.e. blog exists
 			if(blog){
+
 				let updateBlogStatus = {status:1};
-				blogModel.update({'_id':blogId},updateBlogStatus,(err,update)=>{
+
+				blogModel.update({'_id':blogId}, updateBlogStatus , (err,update) => {
 					if(update.nModified == 1){
                         resObj = Common.generateResponses(200,'success','Blog is deleted successfully.');
 					}else{
@@ -42,7 +44,7 @@ module.exports = {
                         resObj.error = err 
 					}
                     res.status(resObj.statusCode).json(resObj);
-				})
+				});
 			}
 		})
 

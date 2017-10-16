@@ -34,7 +34,7 @@ module.exports = {
 				}
 				if(category){
 					let changeStatus = {status : status=='hide' ? 1: 0}
-					category.update({'_id':categoryId},changeStatus,function(err,update)=>{
+					category.update({'_id':categoryId},changeStatus, (err,update)=>{
 						if(err){
 							resObj = Common.generateResponses(500,'failed','Something went wrong, please try later');
 						}else if(update){

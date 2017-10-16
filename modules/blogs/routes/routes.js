@@ -18,12 +18,12 @@ router
 	.get('/read-blog/:blog_id', 							fileObj['crud.blog'].read)
 	.put('/:blog_id/update-blog', 							fileObj['crud.blog'].update)
 	.put('/:blog_id/soft-delete-blog', 						fileObj['crud.blog'].softDelete)
-	.delete('/:blog_id/delete-blog', 						fileObj['crud.blog'].finalDelete);
+	.delete('/:blog_id/delete-blog', 						fileObj['crud.blog'].finalDelete)
 
 	.post('/category/add',									fileObj['crud.category'].addCategory)
-	.get('/category/all',									)
-	.put('/category/:category_id/update',					fileObj['crud.category'.updateThisCategory])
-	.put('/category/:category_id/status',					fileObj['crud.category'].categoryStatus)
+//	.get('/category/all',									)
+	.put('/category/:category_id/update',					fileObj['crud.category'].updateThisCategory)
+	.put('/category/:category_id/status',					fileObj['crud.category'].categoryStatus);
 	//@ ../status?make=hide/unhide 
 
 module.exports = {
