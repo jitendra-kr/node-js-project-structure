@@ -229,6 +229,8 @@ exports.resetPassword = (req, res) => {
         if(err){
             resObj = Common.generateResponses(500,'failed','Something went wrong ');
             resObj.error = err;
+            res.status(resObj.statusCode).json(resObj);
+
         }
         
         //@ if user exists
