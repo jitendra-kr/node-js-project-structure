@@ -1,5 +1,6 @@
-const path 		= require('path'),
-	blogModel	= require('../models/blogs.model');
+const path 				= require('path'),
+    helperLib           = require(path.resolve('./config/lib/helper_lib')),
+	blogModel			= require('../models/blogs.model');
 
 //@ demo methods for future use
 module.exports = {
