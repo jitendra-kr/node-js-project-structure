@@ -19,7 +19,8 @@ router
 	.put('/:blog_id/update-blog', 							fileObj['crud.blog'].update)
 	.put('/:blog_id/soft-delete-blog', 						fileObj['crud.blog'].softDelete)
 	.delete('/:blog_id/delete-blog', 						fileObj['crud.blog'].finalDelete)
-
+	.post('/upload/blog-image',								fileObj['crud.blog'].upploadBlogImage)
+	
 	.post('/category/add',									fileObj['crud.category'].addCategory)
 //	.get('/category/all',									)
 	.put('/category/:category_id/update',					fileObj['crud.category'].updateThisCategory)
