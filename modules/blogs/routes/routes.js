@@ -23,8 +23,7 @@ router
 	.post('/category/add',									fileObj['crud.category'].addCategory)
 //	.get('/category/all',									)
 	.put('/category/:category_id/update',					fileObj['crud.category'].updateThisCategory)
-	.put('/category/:category_id/status',					fileObj['crud.category'].categoryStatus);
-	//@ ../status?make=hide/unhide 
+	.put('/category/:category_id/status/:statusAction',		fileObj['crud.category'].categoryStatus); //@ ../status/statusAction=hide/unhide 
 
 module.exports = {
 	router: router,
