@@ -10,20 +10,16 @@ const path			     = require('path'),
 
 module.exports = (app) => {
 
-
-
-
-    let dirObj = {};
-
     //@ validate api with express-jwt
     app.use(expressJWT({
         secret: new Buffer(ENV.JWT_KEY).toString('base64')
     }).unless({
-        //@ pass api without validating
+    
+    //@ pass api without validating
         path: unlessRoutes
     }));
 
-    //@ error handler for unauthorized routes
+    //@ error handler for unauthorized routes rejected by JWT 
     app.use(function (err, req, res, next) {
       if (err.name === 'UnauthorizedError') {
 
@@ -38,16 +34,14 @@ module.exports = (app) => {
     });
 
 
+    //@ require all controllers here
     fs.readdirSync(location)
         .filter((dir) => {
             return fs.statSync(`${location}/${dir}`).isDirectory();
         }).forEach((dir, index) => {
-
-            let fileObj;
-            fileObj = require(path.resolve(`./modules/${dir}/routes/routes`));            
+            let fileObj = require(path.resolve(`./modules/${dir}/routes/routes`));            
             app.use(fileObj.base,	fileObj.router);
-
-        });
+    });
 
 
     //@ global error handling middleware
@@ -62,7 +56,6 @@ module.exports = (app) => {
 
         res.status(500).json(resObj);
     });    
-
 }
 
 
