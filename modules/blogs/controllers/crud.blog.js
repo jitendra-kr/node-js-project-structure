@@ -1,26 +1,30 @@
 const path 				= require('path'),
 	multer				= require('multer'),
-	upload				= require({dest:path.resolve('./uploads')}),
+	// upload				= require({dest:path.resolve('./uploads')}),
     helperLib           = require(path.resolve('./config/lib/helper_lib')),
-	blogModel			= require('../models/blogs.model'),
+	blogModel			= require('../models/blogs.model');
 
 //@ demo methods for future use
 module.exports = {
 
-	create: (req, res) => {
+	upploadBlogImage (req, res) {
+
+	},
+
+	create (req, res)  {
 		res.json({status: "blog created"});	
 	},
 
-	read: (req, res, next) => {
+	read (req, res, next)  {
 		next('hello')
 		res.json({status: "blog content"});	
 	},
 
-	update: (req, res) => {
+	update (req, res)  {
 		res.json({status: "blog updated"});	
 	},
 
-	softDelete: (req, res) => {
+	softDelete (req, res)  {
 		let blogData 	= req.body.blogData,
 			blogId 		= req.params.blog_id,
 			Common      = new helperLib.common.common(),
@@ -38,7 +42,7 @@ module.exports = {
 
 				let updateBlogStatus = {status:1};
 
-				blogModel.update({'_id':blogId}, updateBlogStatus , (err,update) => {
+				blogModel.update({'_id':blogId}, updateBlogStatus , (err, update) => {
 					if(update.nModified == 1){
                         resObj = Common.generateResponses(200,'success','Blog is deleted successfully.');
 					}else{
@@ -53,7 +57,7 @@ module.exports = {
 		
 	},
 
-	finalDelete : (req,res)=>{
+	finalDelete (req,res) {
 		res.json({status: "blog deleted"});
 	}
 
