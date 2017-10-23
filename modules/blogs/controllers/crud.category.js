@@ -14,7 +14,7 @@ module.exports = {
 	},
 	categoryStatus: 	(req,res)=>{
 		let categoryId 	= req.params.category_id,
-			status 		= req.query.make,
+			status 		= req.params.statusAction,
 			resObj		= {},
 			isThereErr	= false, //@ can be useful in future for any manipulations
 			Common 		= new helperLib.common.common();

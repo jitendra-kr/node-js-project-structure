@@ -1,6 +1,8 @@
 const path 				= require('path'),
+	multer				= require('multer'),
+	upload				= require({dest:path.resolve('./uploads')}),
     helperLib           = require(path.resolve('./config/lib/helper_lib')),
-	blogModel			= require('../models/blogs.model');
+	blogModel			= require('../models/blogs.model'),
 
 //@ demo methods for future use
 module.exports = {
