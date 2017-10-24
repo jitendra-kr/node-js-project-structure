@@ -1,38 +1,11 @@
 const path			     = require('path'),
 	fs 			         = require('fs'),
-    os                   = require('os'),
-    expressJWT           = require('express-jwt'),
     ENV                  = require(path.resolve(`./config/env/${process.env.NODE_ENV}`))
     helperLib            = require(path.resolve('./config/lib/helper_lib')),
-    unlessRoutes         = require('./unless.routes'),
 	location		     = path.resolve('./modules');
 
 
 module.exports = (app) => {
-
-    //@ validate api with express-jwt
-    app.use(expressJWT({
-        secret: new Buffer(ENV.JWT_KEY).toString('base64')
-    }).unless({
-    
-    //@ pass api without validating
-        path: unlessRoutes
-    }));
-
-    //@ error handler for unauthorized routes rejected by JWT 
-    app.use(function (err, req, res, next) {
-      if (err.name === 'UnauthorizedError') {
-
-            res.status(401).render('404',{
-                status:'failed',
-                requestType: 'Unauthorized request'
-            });
-
-      }else{
-        next();
-      }
-    });
-
 
     //@ require all controllers here
     fs.readdirSync(location)
@@ -57,7 +30,3 @@ module.exports = (app) => {
         res.status(500).json(resObj);
     });    
 }
-
-
-
-
