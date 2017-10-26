@@ -2,14 +2,14 @@ const mongoose 	= require('mongoose'),
 	Schema		= mongoose.Schema;
 
 let BlogCategorySchema = new Schema({
-	name:{
+	title:{
 		type:String,
 		required:[true,'Name is required']
 	},
-	logo:{
+	image:{
 		type:String
 	},
-	totalArticles:{
+	blogs:{
 		type:Number,
 		default:0 //@ this is the current value
 	},

@@ -1,15 +1,16 @@
 const path 			= require('path'),
     helperLib       = require(path.resolve('./config/lib/helper_lib')),
-	categoryModel	= require('../models/blog.category.model');
+	categoryModel	= require('../models/blogs.category.model');
 
 
 module.exports = {
 	
 
-	addCategory : (req,res)=>{
+	addCategory(req, res) {
 
 	},
-	updateThisCategory: (req,res)=>{
+
+	updateThisCategory(req, res){
 
 	},
 	categoryStatus: 	(req,res)=>{
