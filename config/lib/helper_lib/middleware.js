@@ -1,6 +1,5 @@
 const path			= require('path'),
-	fs 				= require('fs'),
-	
+	fs 				= require('fs'),	
 	jwt 			= require('./jwt');
 
 
@@ -99,6 +98,33 @@ class Middleware {
         	// if file already exist
             fs.appendFileSync(file, errObj);
         }		
+	}
+
+
+	//@ change status type string to integer
+	statusStrToInt(req, res, next) {
+
+		//@ change status to number
+	 	if (req.body.status == 0 || req.body.status) {
+	 		req.body.status = parseInt(req.body.status)
+		 	//@ send failed response if status is not number
+		 	if (!Number.isInteger(req.body.status)) {
+		 		 let resObj = {
+		 		 	statusCode: 400,
+		 		 	message: 'status should be number'
+		 		 }
+		 		 //@ send response
+		 		 res.status(resObj.statusCode).json(resObj);
+		 	}else{	 
+
+		 		//@ OK		
+				next();
+		 	}
+	 	}else{
+	 		next();	 		
+	 	}
+
+
 	}
 
 }

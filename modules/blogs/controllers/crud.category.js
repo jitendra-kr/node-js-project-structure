@@ -1,12 +1,59 @@
 const path 			= require('path'),
     helperLib       = require(path.resolve('./config/lib/helper_lib')),
-	categoryModel	= require('../models/blogs.category.model');
+    _ 				= require("lodash"),
+	CategoryModel	= require('../models/blogs.category.model');
 
 
 module.exports = {
 	
 
 	addCategory(req, res) {
+        let resObj = {};
+        let Common = new helperLib.common.common();
+
+		//@ check if body is empty
+		if (_.isEmpty(req.body)) {
+			resObj = Common.generateResponses(400, 'failed', helperLib.messages.bodyEmpty);
+			return res.status(resObj.statusCode).json(resObj);
+		}
+
+	    let categoryModel = new CategoryModel(req.body);
+
+	    //@ save object to database
+	    categoryModel.save((err, saved) => {
+
+	    	let message = helperLib.messages.stw;
+	        if (err) {	        	
+	        	if (err.name == "ValidationError") {
+		        	let tempErr = err.errors;
+		        	let first = Object.keys(tempErr)[0];	
+	                message = tempErr[first].properties.message;
+	                err = err.errors;
+	        	}
+                resObj = Common.generateResponses(400, 'failed', message, err);              
+
+	        } else {
+	            saved.password = undefined;
+	            resObj = Common.generateResponses(200, 'success', `Category ${helperLib.messages.added}`, null, saved);
+	        }
+	        res.status(resObj.statusCode).json(resObj);
+	    });		
+	},
+
+	getCategoryList(req, res) {
+
+		CategoryModel.find({}, {name:1, status:1}, {sort: {
+			created_at: -1
+		}}, (err, category)=> {
+	        let resObj = {};
+	        let Common = new helperLib.common.common();			
+			if (err) {
+				resObj = Common.generateResponses(400, 'failed', helperLib.messages.stw, err);  
+			}else{
+				resObj = Common.generateResponses(200, 'success', null, null, category);  
+			}
+			res.status(resObj.statusCode).json(resObj);
+		});
 
 	},
 

@@ -19,7 +19,9 @@ module.exports = {
 		next('hello')
 		res.json({status: "blog content"});	
 	},
-
+	getBlogList(re, res){
+		
+	},
 	update (req, res)  {
 		res.json({status: "blog updated"});	
 	},

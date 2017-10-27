@@ -5,5 +5,8 @@ module.exports = {
 	absent: 'not found',
 	accoundCreated: 'Account created successfully',
 	alreadyTaken: 'already taken',
-	passwordNotFound: 'password is required to register'
+	passwordNotFound: 'password is required to register',
+	bodyEmpty: "Params not found",
+	stw: "Something went wrong",
+	added: "added successfully"
 }

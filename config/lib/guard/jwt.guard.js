@@ -5,13 +5,13 @@ const expressJWT           	= require('express-jwt'),
 module.exports = (app, ENV) => {
 
     //@ validate api with express-jwt
-    app.use(expressJWT({
-        secret: new Buffer(ENV.JWT_KEY).toString('base64')
-    }).unless({
+    // app.use(expressJWT({
+    //     secret: new Buffer(ENV.JWT_KEY).toString('base64')
+    // }).unless({
     
-    //@ pass api without validating
-        path: unlessRoutes
-    }));
+    // //@ pass api without validating
+    //     path: unlessRoutes
+    // }));
 
     //@ error handler for unauthorized routes rejected by JWT 
     app.use(function (err, req, res, next) {
