@@ -17,16 +17,16 @@ module.exports = (app) => {
     });
 
 
-    //@ global error handling middleware
-    app.use((err, req, res, next) => {
+    // //@ global error handling middleware
+    // app.use((err, req, res, next) => {
 
-        let Common        = new helperLib.common.common();
-        let Middleware    = new helperLib.middleware();
+    //     let Common        = new helperLib.common.common();
+    //     let Middleware    = new helperLib.middleware();
 
-        //@ write error logs into file
-        Middleware.writeErrorIntoFile(err, req);
-        let resObj = Common.generateResponses(500, 'failed', err.message || err.stack);
+    //     //@ write error logs into file
+    //     Middleware.writeErrorIntoFile(err, req);
+    //     let resObj = Common.generateResponses(500, 'failed', err.message || err.stack);
 
-        res.status(500).json(resObj);
-    });    
+    //     res.status(500).json(resObj);
+    // });    
 }

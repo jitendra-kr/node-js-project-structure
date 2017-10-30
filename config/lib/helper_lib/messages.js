@@ -8,5 +8,7 @@ module.exports = {
 	passwordNotFound: 'password is required to register',
 	bodyEmpty: "Params not found",
 	stw: "Something went wrong",
-	added: "added successfully"
+	added: "added successfully",
+	updated: "updated successfully",
+	deleted: "deleted successfully"
 }
