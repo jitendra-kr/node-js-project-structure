@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha --timeout=7000",
-    "start": "node server.js"
+    "start": "node server.js",
+		"dev":"NODE_ENV=local node server.js",
+		"devmon":"NODE_ENV=local nodemon"
   },
   "author": "Jitendra",
   "license": "MIT",
