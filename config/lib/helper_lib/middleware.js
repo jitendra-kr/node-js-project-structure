@@ -34,10 +34,11 @@ class Middleware {
 			if (!password) {
 				resObj.message = helperLib.messages.passwordNotFound;
 				res.status(resObj.statusCode).json(resObj);
+				return;
 			}
 			
 		let length = password.length,
-			minLength = 8,
+			minLength = 5,
 			maxLength = 12,
 			havingSpace = /\s/g.test(password),
 			havingSpecialChar = format.test(password); 
