@@ -23,6 +23,6 @@ router
 
 module.exports = {
 	router: router,
-	base: '/api/user-profile'	
+	base: '/api/user'	
 };
 

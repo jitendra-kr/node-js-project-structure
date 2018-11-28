@@ -8,6 +8,7 @@ const path              = require('path'),
 
 exports.register = (req, res) => {
 
+    console.log(req.body);
     let userProfileModel = new UserProfileModel(req.body);
 
     //@ save object to database

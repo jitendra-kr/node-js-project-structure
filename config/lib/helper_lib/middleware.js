@@ -46,7 +46,9 @@ class Middleware {
 			//@ check password length 
 			//@ password should contain a special character
 			//@ password should not contain white space
-			if (length < minLength || length > maxLength || havingSpace || !havingSpecialChar) {          
+
+			//@ if you want to add special character check you can include !havingSpecialChar in condition
+			if (length < minLength || length > maxLength || havingSpace) {          
 
 				resObj.message = length < minLength ? "password length shoud be not be less than " + minLength
 								 : length > maxLength ? "password should not be greater than " +maxLength
