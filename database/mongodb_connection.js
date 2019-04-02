@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
   chalk = require("chalk");
 
-module.exports = function(ENV) {
+module.exports = (ENV) => {
   mongoose.Promise = global.Promise;
   mongoose.set("debug", ENV.MONGO_DEBUG);
 

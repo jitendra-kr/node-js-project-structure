@@ -1,13 +1,14 @@
 const crypto 			= require('crypto'),
-	path				= require('path'),
-	ENV 				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
+	path = require('path'),
+	Config = require(path.resolve("./configuration"));
 
 
+const config = Config.getConfig();
 class Crypt {
 
 	constructor() {
-		this.key  = ENV.ENCRYPTION_KEY ;
-		this.algo = ENV.ENCRYPTION_ALGO ;
+		this.key  = config.ENCRYPTION_KEY ;
+		this.algo = config.ENCRYPTION_ALGO ;
 	}
 
 
@@ -31,7 +32,7 @@ class Crypt {
 		   decipher = crypto.createDecipheriv(this.algo, new Buffer(this.key), iv),
 		   decrypted = decipher.update(encryptedText)
 
-		   
+
 		  decrypted = Buffer.concat([decrypted, decipher.final()]);
 
 	  return decrypted.toString();

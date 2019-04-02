@@ -2,7 +2,7 @@ process.env.NODE_ENV='test'
 
 const fs			= require('fs'),
 	path			= require('path'),
-	helperLib       = require(path.resolve('./config/lib/helper_lib')),
+	helperLib       = require(path.resolve('./config/lib')),
 	location		= path.resolve('./modules');
 
 let ReadDirectory 	= new helperLib.read_directory.readDirectory();

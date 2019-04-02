@@ -4,7 +4,7 @@ const helmet = require("helmet"),
   morgan = require("morgan"),
   bodyParser = require("body-parser");
 
-module.exports = function(app) {
+exports.init = (app) => {
   //@ used helmet to secure headers
   app.use(helmet());
 
@@ -15,7 +15,7 @@ module.exports = function(app) {
   app.use(bodyParser.json());
 
   //@ allow/enable cross origin request
-  app.use(function(req, res, next) {
+  app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header("Access-Control-Allow-Origin", "*");
     res.header(

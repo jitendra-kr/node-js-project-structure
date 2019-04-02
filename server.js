@@ -1,29 +1,33 @@
-require("dotenv").config();
 const express = require("express"),
-	app = express(),
-	server = require("http").createServer(app),
-	path = require("path"),
-	chalk = require("chalk"),
-	ENV = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
-require(path.resolve("./config/lib/server"))(app, ENV);
+  app = express(),
+  server = require("http").createServer(app),
+  path = require("path"),
+  chalk = require("chalk"),
+  registerRoutes = require("./routes"),
+  db = require("./database"),
+  Express = require("./express"),
+  Config = require(path.resolve("./configuration"));
+
+const config = Config.getConfig();
 
 //@ start server
-function startServer() {
-	server.listen(ENV.PORT, () => {
-		console.log(
-			chalk`{green Node Js server running on {green.bold ${
-				ENV.PORT
-				}} port at {green.bold ${ENV.MODE_TYPE}}..}`
-		);
-	});
-}
+server.listen(config.PORT, () => {
+  console.log(
+    chalk`{green Node Js server running on {green.bold ${
+      config.PORT
+      }} port at {green.bold ${config.MODE_TYPE}}..}`
+  );
+});
 
-//@
-if (require.main == module) {
-	//@ run server without cluster module
-	startServer();
-} else {
-	//@ export startServer method to run application using cluster module
-	module.exports = startServer;
-}
+//@ Initialize express
+Express.init(app);
+
+//@ connect mongodb
+db.connectMongoDB(config);
+
+//@ register routes
+console.log("registering routes");
+registerRoutes.registerRoutes(app);
+console.log("routes registered successfully");
+
 module.exports = app;

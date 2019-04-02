@@ -1,13 +1,13 @@
-const path				= require('path'), 
+const path				= require('path'),
 	jwtToken 			= require('jsonwebtoken'),
 	Crypt				= require('./crypt').crypt,
-	ENV 				= require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
+	Config = require(path.resolve("./configuration"));
 
-
+const config = Config.getConfig();
 class Jwt {
 
 	constructor() {
-		this.key = new Buffer(ENV.JWT_KEY).toString('base64') ;
+		this.key = new Buffer(config.JWT_KEY).toString('base64') ;
 	}
 
 	sign(data) {
@@ -17,7 +17,7 @@ class Jwt {
 
 		let token = jwtToken.sign(payload, this.key) ;
 
-		return token ;		
+		return token ;
 	}
 
 	verify (token) {
@@ -32,10 +32,10 @@ class Jwt {
 				payload = JSON.parse(decrypt)  ;
 			}catch(e){
 				payload = decrypt ;
-			}			
+			}
 
 		return payload ;
-	}	
+	}
 }
 
 module.exports = Jwt

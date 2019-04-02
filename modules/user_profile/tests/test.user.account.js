@@ -5,7 +5,7 @@ const path				= require('path'),
 	UserProfileModel    = require(path.resolve('./modules/user_profile/models/user.profile.model')),
 	chai 				= require('chai'),
 	chaiHttp 			= require('chai-http'),
-	helperLib   		= require(path.resolve('./config/lib/helper_lib')),
+	helperLib   		= require(path.resolve('./config/lib')),
 	expect 				= chai.expect,
 	should 				= chai.should();
 
@@ -18,7 +18,7 @@ describe('POST /register', () => {
 
 	let url = `${baseUrl}/register`;
 
-	before(function(){			
+	before(function(){
 		UserProfileModel.find({}).remove((err, removed) => {});
 	});
 
@@ -47,8 +47,8 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(helperLib.messages.alreadyTaken));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
-	});	
+			});
+	});
 
 	it('it should not register without password', (done) => {
 
@@ -62,7 +62,7 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(helperLib.messages.passwordNotFound));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
+			});
 	});
 
 	it('it should not register with small password', (done) => {
@@ -77,8 +77,8 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(/password length shoud be not be less than/));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
-	});		
+			});
+	});
 
 	it('it should not register with small password', (done) => {
 
@@ -92,8 +92,8 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(/password should not be greater than/));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
-	});		
+			});
+	});
 
 	it('it should not register if password contain white space', (done) => {
 
@@ -107,8 +107,8 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(/password should not contain any spaces/));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
-	});		
+			});
+	});
 
 	it('it should not register if password does not contain any special character', (done) => {
 
@@ -122,8 +122,8 @@ describe('POST /register', () => {
 				res.body.should.have.property('message').to.match(new RegExp(/password should contain minimum one special character /));
 				res.body.should.have.property('status').equal('failed');
 				done();
-			});		
-	});	
+			});
+	});
 
 
 });
@@ -144,7 +144,7 @@ describe('POST /login', () => {
 				res.body.should.have.property('status').equal('success');
 				done();
 			});
-			
+
 	});
 
 	it('it should failed without email or password', (done) => {

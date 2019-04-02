@@ -1,6 +1,6 @@
 const mongoose		= require('mongoose'),
 	path			= require('path'),
-	helperLib		= require(path.resolve('./config/lib/helper_lib')),
+	helperLib		= require(path.resolve('./utils')),
 	Schema			= mongoose.Schema;
 
 
@@ -22,11 +22,11 @@ let userProfileSchema = new Schema({
 	},
 	last_name: {
 		type: String,
-		trim: true		
+		trim: true
 	},
 	gender: {
-		type: String, 
-		enum: ["male", "female", "other"]	
+		type: String,
+		enum: ["male", "female", "other"]
 	},
 	email: {
 		type: String,
@@ -46,7 +46,7 @@ let userProfileSchema = new Schema({
 		type: String,
 		required: [true, 'password is required']
 	}
-}, 
+},
 
 {timestamps: {
 		createdAt: 'created_at',
@@ -60,7 +60,7 @@ userProfileSchema.pre('save', function(next){
 
 		let Crypt = new helperLib.crypt.crypt();
 
-		
+
 		//@capital first letter of firstname and last name
 		if (this.first_name) this.first_name = this.first_name.charAt(0).toUpperCase()+this.first_name.slice(1)
 
@@ -82,4 +82,4 @@ userProfileSchema.virtual('full_name').get(function(){
 
 });
 
-module.exports = mongoose.model('UserProfileModel', userProfileSchema);	
+module.exports = mongoose.model('UserProfileModel', userProfileSchema);
