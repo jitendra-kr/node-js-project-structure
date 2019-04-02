@@ -1,10 +1,8 @@
 # NodeJs Project Structure with express
 
-# create .env file
-	
-paste 
+# Set Environment
 
-NODE_ENV=local
+NODE_ENV=dev
 
 # How to run-
 
